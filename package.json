@@ -1,0 +1,17 @@
+{
+  "name": "elekto",
+  "version": "0.1.0",
+  "repository": "https://github.com/ElektoDeBradipo/elekto.git",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "apollo-server-koa": "^1.3.4",
+    "graphql": "^0.13.2",
+    "graphql-tools": "^2.23.1",
+    "koa": "^2.5.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.4.0"
+  }
+}
