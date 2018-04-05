@@ -18,8 +18,11 @@
     "@nestjs/common": "^4.5.9",
     "@nestjs/core": "^4.5.10",
     "@nestjs/microservices": "^4.5.8",
+    "@nestjs/mongoose": "^3.0.1",
     "@nestjs/testing": "^4.5.5",
     "@nestjs/websockets": "^4.5.8",
+    "dotenv": "^5.0.1",
+    "mongoose": "^5.0.12",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.6",
     "typescript": "^2.6.2"
