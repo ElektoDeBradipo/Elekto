@@ -1,0 +1,11 @@
+type Query {
+    shows(ids: [ID]!): ShowIdeas
+}
+
+type ShowIdeas {
+    watchlisted: [Show]
+}
+
+type Show {
+    title: String
+}

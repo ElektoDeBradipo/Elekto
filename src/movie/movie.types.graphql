@@ -1,0 +1,11 @@
+type Query {
+    movies(ids: [ID]!): MovieIdeas
+}
+
+type MovieIdeas {
+    watchlisted: [Movie]
+}
+
+type Movie {
+    title: String
+}
