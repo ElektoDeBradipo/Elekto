@@ -1,0 +1,41 @@
+type User {
+    id: ID! @unique
+    email: String! @unique
+    password: String!
+    nickname: String! @unique
+    firstName: String
+    lastName: String
+    friends: [User!]! @relation(name: "Friends")
+    createdAt: DateTime!
+    movies: [MovieRelation!]! @relation(name: "UserMovies", onDelete: CASCADE)
+    rooms: [Room!]! @relation(name: "RoomMembership")
+    ownedRooms: [Room!]! @relation(name: "RoomOwner", onDelete: CASCADE)
+}
+
+type MovieRelation {
+    watched: Boolean!
+    watchlisted: Boolean!
+    movie: Movie!
+}
+
+type Movie {
+    id: ID! @unique
+    tmdbId: String @unique
+    imdbId: String @unique
+    traktId: String @unique
+    createdAt: DateTime!
+}
+
+type Room {
+  id: ID! @unique
+  type: RoomType!
+  name: String!
+  owner: User! @relation(name: "RoomOwner")
+  members: [User!]! @relation(name: "RoomMembership")
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum RoomType {
+  MOVIE
+}
