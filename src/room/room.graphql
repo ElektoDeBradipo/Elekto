@@ -1,0 +1,26 @@
+type Query {
+  room(id: ID!): Room
+}
+
+type Mutation {
+  roomCreate(name: String!, type: RoomType!): Room
+  roomAdd(users: [User!]!): [User!]!
+  roomRemove(users: [User!]!): [User!]!
+  roomUpdate(name: String, type: RoomType): Room
+  roomDelete(id: ID!): Id
+}
+
+type Room {
+  id: ID!
+  type: RoomType!
+  name: String!
+  owner: User!
+  members: [User!]!
+  results: [RoomResult!]!
+}
+
+union RoomResult = Movie
+
+enum RoomType {
+  MOVIE
+}

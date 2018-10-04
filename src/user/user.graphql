@@ -1,0 +1,30 @@
+type Query {
+  me: User
+  user(id: ID!): User
+}
+
+type Mutation {
+  userUpdate(
+    id: ID!
+    nickname: String
+    firstName: String
+    lastName: String
+  ): User
+  friendAdd(friendId: ID!): User
+  friendRemove(friendId: ID!): User
+  userWatched(movieId: ID!, value: Boolean!): Movie
+  userWatchlisted(movieId: ID!, value: Boolean!): Movie
+}
+
+type User {
+  id: ID!
+  email: String!
+  nickname: String!
+  firstName: String
+  lastName: String
+  friends: [User!]!
+  moviesWatched: [Movies!]!
+  moviesWatchlisted: [Movies!]!
+  rooms: [Room!]!
+  ownedRooms: [Room!]!
+}

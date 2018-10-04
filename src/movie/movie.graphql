@@ -1,0 +1,10 @@
+type Query {
+  movie(id: ID!): Movie
+}
+
+type Movie {
+  id: ID!
+  title: String!
+  year: Number!
+  overview: String!
+}
