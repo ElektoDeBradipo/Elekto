@@ -1,0 +1,122 @@
+mutation {
+  createUser1: createUser(
+    data: { email: "user1@gmail.com", password: "123456", nickname: "user1" }
+  ) {
+    id
+  }
+  createUser2: createUser(
+    data: { email: "user2@gmail.com", password: "123456", nickname: "user2" }
+  ) {
+    id
+  }
+  createUser3: createUser(
+    data: { email: "user3@gmail.com", password: "123456", nickname: "user3" }
+  ) {
+    id
+  }
+  createMovie1: createMovie(data: { tmdbId: "335983-venom" }) {
+    id
+  }
+  createMovie2: createMovie(data: { tmdbId: "363088-ant-man-and-the-wasp" }) {
+    id
+  }
+  createMovie3: createMovie(data: { tmdbId: "299536-avengers-infinity-war" }) {
+    id
+  }
+  createMovie4: createMovie(data: { tmdbId: "439079-the-nun" }) {
+    id
+  }
+  updateUser1: updateUser(
+    where: { nickname: "user1" }
+    data: {
+      movies: {
+        create: [
+          {
+            watched: true
+            watchlisted: false
+            movie: { connect: { tmdbId: "335983-venom" } }
+          }
+          {
+            watched: true
+            watchlisted: false
+            movie: { connect: { tmdbId: "363088-ant-man-and-the-wasp" } }
+          }
+          {
+            watched: false
+            watchlisted: true
+            movie: { connect: { tmdbId: "299536-avengers-infinity-war" } }
+          }
+          {
+            watched: false
+            watchlisted: true
+            movie: { connect: { tmdbId: "439079-the-nun" } }
+          }
+        ]
+      }
+    }
+  ) {
+    id
+  }
+  updateUser2: updateUser(
+    where: { nickname: "user2" }
+    data: {
+      movies: {
+        create: [
+          {
+            watched: false
+            watchlisted: true
+            movie: { connect: { tmdbId: "335983-venom" } }
+          }
+          {
+            watched: true
+            watchlisted: false
+            movie: { connect: { tmdbId: "363088-ant-man-and-the-wasp" } }
+          }
+          {
+            watched: true
+            watchlisted: false
+            movie: { connect: { tmdbId: "299536-avengers-infinity-war" } }
+          }
+          {
+            watched: false
+            watchlisted: true
+            movie: { connect: { tmdbId: "439079-the-nun" } }
+          }
+        ]
+      }
+    }
+  ) {
+    id
+  }
+  updateUser3: updateUser(
+    where: { nickname: "user3" }
+    data: {
+      movies: {
+        create: [
+          {
+            watched: false
+            watchlisted: true
+            movie: { connect: { tmdbId: "335983-venom" } }
+          }
+          {
+            watched: false
+            watchlisted: true
+            movie: { connect: { tmdbId: "363088-ant-man-and-the-wasp" } }
+          }
+          {
+            watched: true
+            watchlisted: false
+            movie: { connect: { tmdbId: "299536-avengers-infinity-war" } }
+          }
+          {
+            watched: true
+            watchlisted: false
+            movie: { connect: { tmdbId: "439079-the-nun" } }
+          }
+        ]
+      }
+    }
+  ) {
+    id
+  }
+}

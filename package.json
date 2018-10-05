@@ -20,8 +20,8 @@
     "gen:db": "prisma deploy && graphql get-schema --project database && graphql codegen --project database"
   },
   "dependencies": {
-    "@nestjs/common": "^5.1.0",
-    "@nestjs/core": "^5.1.0",
+    "@nestjs/common": "^5.3.11",
+    "@nestjs/core": "^5.3.11",
     "@nestjs/graphql": "^5.4.0",
     "@nestjs/jwt": "^0.2.0",
     "apollo-server-express": "^2.1.0",
@@ -39,7 +39,7 @@
     "typescript": "^3.0.1"
   },
   "devDependencies": {
-    "@nestjs/testing": "^5.1.0",
+    "@nestjs/testing": "^5.3.11",
     "@types/express": "^4.16.0",
     "@types/jest": "^23.3.1",
     "@types/joi": "^13.6.0",

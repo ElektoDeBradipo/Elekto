@@ -4,8 +4,8 @@ type Query {
 
 type Mutation {
   roomCreate(name: String!, type: RoomType!): Room
-  roomAdd(users: [User!]!): [User!]!
-  roomRemove(users: [User!]!): [User!]!
+  roomAdd(users: [ID]!): [User!]!
+  roomRemove(users: [ID]!): [User!]!
   roomUpdate(name: String, type: RoomType): Room
   roomDelete(id: ID!): Id
 }

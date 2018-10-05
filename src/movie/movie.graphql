@@ -5,6 +5,6 @@ type Query {
 type Movie {
   id: ID!
   title: String!
-  year: Number!
+  year: Int!
   overview: String!
 }

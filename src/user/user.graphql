@@ -23,8 +23,8 @@ type User {
   firstName: String
   lastName: String
   friends: [User!]!
-  moviesWatched: [Movies!]!
-  moviesWatchlisted: [Movies!]!
+  moviesWatched: [Movie!]!
+  moviesWatchlisted: [Movie!]!
   rooms: [Room!]!
   ownedRooms: [Room!]!
 }
