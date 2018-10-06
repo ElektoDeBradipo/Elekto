@@ -8,3 +8,9 @@ export interface IMovie {
 
 export type IMovieFull = IMovie & Id;
 export type IMoviePartial = Partial<IMovieFull>;
+
+export interface IMovieIds {
+  imdbId: string;
+  tmdbId: string;
+  traktId: string;
+}

@@ -1,5 +1,5 @@
 type Query {
-  room(id: ID!, mode: RoomModeInput!): Room
+  room(id: ID!): Room
 }
 
 type Mutation {
@@ -16,16 +16,14 @@ type Room {
   name: String!
   owner: User!
   members: [User!]!
-  results: [RoomResult!]!
+  movies(mode: MovieModeInput): [Movie!]
 }
-
-union RoomResult = Movie
 
 enum RoomType {
   MOVIE
 }
 
-enum RoomModeInput {
+enum MovieModeInput {
   TRENDING
   WATCHLISTED
 }

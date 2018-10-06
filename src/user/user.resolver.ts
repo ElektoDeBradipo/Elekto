@@ -25,7 +25,7 @@ export class UserResolver {
   ) {}
 
   @Query('user')
-  async user(@Args('id') id: string, @Info() info): Promise<IUserPartial> {
+  async user(@Args('id') id: string, @Info() info): Promise<any> {
     return await this.prisma.query.user({ where: { id } }, info);
   }
 

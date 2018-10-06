@@ -1,5 +1,5 @@
-import { IRoom } from '../room/room.interface';
-import { IMovie } from '../movie/movie.interface';
+import { IRoom, IRoomPartial } from '../room/room.interface';
+import { IMoviePartial } from '../movie/movie.interface';
 import { Id } from '../common/common.interface';
 
 export class IUser {
@@ -8,11 +8,11 @@ export class IUser {
   nickname: string;
   firstName: string;
   lastName: string;
-  friends: [IUser];
-  moviesWatched: [IMovie];
-  moviesWatchlisted: [IMovie];
-  rooms: [IRoom];
-  ownedRooms: [IRoom];
+  friends: IUserPartial[];
+  moviesWatched: IMoviePartial[];
+  moviesWatchlisted: IMoviePartial[];
+  rooms: IRoomPartial[];
+  ownedRooms: IRoomPartial[];
 }
 
 export type IUserFull = IRoom & Id;
