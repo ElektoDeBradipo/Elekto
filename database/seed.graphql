@@ -14,16 +14,16 @@ mutation {
   ) {
     id
   }
-  createMovie1: createMovie(data: { tmdbId: "335983-venom" }) {
+  createMovie1: createMovie(data: { tmdbId: "335983" }) {
     id
   }
-  createMovie2: createMovie(data: { tmdbId: "363088-ant-man-and-the-wasp" }) {
+  createMovie2: createMovie(data: { tmdbId: "363088" }) {
     id
   }
-  createMovie3: createMovie(data: { tmdbId: "299536-avengers-infinity-war" }) {
+  createMovie3: createMovie(data: { tmdbId: "299536" }) {
     id
   }
-  createMovie4: createMovie(data: { tmdbId: "439079-the-nun" }) {
+  createMovie4: createMovie(data: { tmdbId: "439079" }) {
     id
   }
   updateUser1: updateUser(
@@ -34,22 +34,22 @@ mutation {
           {
             watched: true
             watchlisted: false
-            movie: { connect: { tmdbId: "335983-venom" } }
+            movie: { connect: { tmdbId: "335983" } }
           }
           {
             watched: true
             watchlisted: false
-            movie: { connect: { tmdbId: "363088-ant-man-and-the-wasp" } }
+            movie: { connect: { tmdbId: "363088" } }
           }
           {
             watched: false
             watchlisted: true
-            movie: { connect: { tmdbId: "299536-avengers-infinity-war" } }
+            movie: { connect: { tmdbId: "299536" } }
           }
           {
             watched: false
             watchlisted: true
-            movie: { connect: { tmdbId: "439079-the-nun" } }
+            movie: { connect: { tmdbId: "439079" } }
           }
         ]
       }
@@ -65,22 +65,22 @@ mutation {
           {
             watched: false
             watchlisted: true
-            movie: { connect: { tmdbId: "335983-venom" } }
+            movie: { connect: { tmdbId: "335983" } }
           }
           {
             watched: true
             watchlisted: false
-            movie: { connect: { tmdbId: "363088-ant-man-and-the-wasp" } }
+            movie: { connect: { tmdbId: "363088" } }
           }
           {
             watched: true
             watchlisted: false
-            movie: { connect: { tmdbId: "299536-avengers-infinity-war" } }
+            movie: { connect: { tmdbId: "299536" } }
           }
           {
             watched: false
             watchlisted: true
-            movie: { connect: { tmdbId: "439079-the-nun" } }
+            movie: { connect: { tmdbId: "439079" } }
           }
         ]
       }
@@ -96,22 +96,22 @@ mutation {
           {
             watched: false
             watchlisted: true
-            movie: { connect: { tmdbId: "335983-venom" } }
+            movie: { connect: { tmdbId: "335983" } }
           }
           {
             watched: false
             watchlisted: true
-            movie: { connect: { tmdbId: "363088-ant-man-and-the-wasp" } }
+            movie: { connect: { tmdbId: "363088" } }
           }
           {
             watched: true
             watchlisted: false
-            movie: { connect: { tmdbId: "299536-avengers-infinity-war" } }
+            movie: { connect: { tmdbId: "299536" } }
           }
           {
             watched: true
             watchlisted: false
-            movie: { connect: { tmdbId: "439079-the-nun" } }
+            movie: { connect: { tmdbId: "439079" } }
           }
         ]
       }

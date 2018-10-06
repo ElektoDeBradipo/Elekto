@@ -18,8 +18,9 @@ import {
 } from '../movie/movie.interface';
 import { Movie } from '../prisma/prisma.binding';
 import { ProviderService } from '../provider/provider.service';
+import { ConfigService } from '../config/config.service';
 
-const roomWathlisted = `
+const roomWatchlisted = `
 { 
   members { 
     id 
@@ -34,12 +35,31 @@ const roomWathlisted = `
   } 
 }`;
 
+const roomWatched = `
+{ 
+  members { 
+    id 
+    movies(where: { watched: true }) { 
+      movie { 
+        id
+        tmdbId
+        imdbId
+        traktId 
+      } 
+    } 
+  } 
+}`;
+
 @Resolver('Room')
 export class RoomResolver {
+  private defaultResultNumber: number;
   constructor(
     private prisma: PrismaService,
     private provider: ProviderService,
-  ) {}
+    private config: ConfigService,
+  ) {
+    this.defaultResultNumber = config.defaultResultNumber;
+  }
 
   @Query()
   async room(@Args('id') id: string, @Info() info): Promise<IMoviePartial> {
@@ -57,7 +77,7 @@ export class RoomResolver {
     if (mode == ResultMode.WATCHLISTED) {
       const room = await this.prisma.query.room(
         { where: { id } },
-        roomWathlisted,
+        roomWatchlisted,
       );
 
       for (const member of room.members) {
@@ -77,16 +97,28 @@ export class RoomResolver {
           movies.set(movie.id, m);
         }
       }
+    } else if (mode == ResultMode.TRENDING) {
+      const room = await this.prisma.query.room({ where: { id } }, roomWatched);
+      const excludedMovies = new Map<string, Partial<IMovieIds>>();
+
+      for (const member of room.members) {
+        for (const movie of member.movies.map(x => x.movie)) {
+          excludedMovies.set(movie.id, movie);
+        }
+      }
+
+      return await this.provider.getTrendingMovies(
+        this.defaultResultNumber,
+        Array.from(excludedMovies.values()),
+      );
     }
 
-    return Array.from(movies.entries())
-      .map(([key, movie]) => movie)
-      .sort((m1, m2) => {
-        if (mode == ResultMode.WATCHLISTED) {
-          return m2.watchlistedCount - m1.watchlistedCount;
-        }
-        return 0;
-      });
+    return Array.from(movies.values()).sort((m1, m2) => {
+      if (mode == ResultMode.WATCHLISTED) {
+        return m2.watchlistedCount - m1.watchlistedCount;
+      }
+      return 0;
+    });
   }
 }
 

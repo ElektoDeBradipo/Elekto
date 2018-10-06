@@ -27,6 +27,7 @@ export class ConfigService {
       DEBUG: Joi.boolean().default(false),
       PRISMA_ENDPOINT: Joi.string().required(),
       TMDB_API_KEY: Joi.string().required(),
+      DEFAULT_RESULT_NUMBER: Joi.number().default(10),
     });
 
     const { error, value: validatedEnvConfig } = Joi.validate(
@@ -41,6 +42,10 @@ export class ConfigService {
 
   get isDebug(): boolean {
     return Boolean(this.envConfig.DEBUG);
+  }
+
+  get defaultResultNumber(): number {
+    return parseInt(this.envConfig.DEFAULT_RESULT_NUMBER);
   }
 
   get(key: string): string {

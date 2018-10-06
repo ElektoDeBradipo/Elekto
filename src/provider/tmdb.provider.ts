@@ -19,4 +19,35 @@ export class TmdbProvider implements IMovieMetadataProvider {
       overview: movie.overview,
     };
   }
+
+  async getTrendingMovies(
+    number: number,
+    excludes: string[],
+  ): Promise<IMovie[]> {
+    let fetching = true;
+    const movies: IMovie[] = [];
+    let page = 1;
+    while (fetching) {
+      const response = await this.tmdb.get('movie/popular', { page });
+      page++;
+      for (const { id, title, overview, releaseDate } of response.results) {
+        if (excludes.indexOf(`${id}`) == -1) {
+          movies.push({
+            title,
+            overview,
+            releaseDate: new Date(releaseDate),
+          });
+          if (movies.length == number) break;
+        }
+      }
+      if (movies.length == number) {
+        fetching = false;
+      }
+      if (response.total_pages == page) {
+        fetching = false;
+      }
+    }
+
+    return movies;
+  }
 }
