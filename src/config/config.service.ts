@@ -26,6 +26,7 @@ export class ConfigService {
         .default('development'),
       DEBUG: Joi.boolean().default(false),
       PRISMA_ENDPOINT: Joi.string().required(),
+      TMDB_API_KEY: Joi.string().required(),
     });
 
     const { error, value: validatedEnvConfig } = Joi.validate(

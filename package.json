@@ -36,6 +36,7 @@
     "prisma-binding": "^2.1.6",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.2.2",
+    "tmdb": "^2.3.0",
     "typescript": "^3.0.1"
   },
   "devDependencies": {

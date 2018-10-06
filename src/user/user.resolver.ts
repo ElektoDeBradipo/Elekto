@@ -8,6 +8,7 @@ import {
   Context,
 } from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
+import { ProviderService } from '../provider/provider.service';
 
 const getMoviesIds = where => `{ 
   movies(where: { ${where} }) { 
@@ -17,7 +18,10 @@ const getMoviesIds = where => `{
 
 @Resolver('User')
 export class UserResolver {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private provider: ProviderService,
+  ) {}
 
   @Query('user')
   async user(@Args('id') id: string, @Info() info) {
@@ -32,12 +36,12 @@ export class UserResolver {
       getMoviesIds('watched: true'),
     );
     const moviesIds = userMovies.movies.map(m => m.movie);
-    return moviesIds.map(movie => ({
-      id: movie.id,
-      title: movie.tmdbId,
-      year: 2018,
-      overview: 'nssdsdflsdkfsdlfk',
-    }));
+    return Promise.all(
+      moviesIds.map(async ids => {
+        const movie = await this.provider.getMovie(ids);
+        return { id: ids.id, ...movie };
+      }),
+    );
   }
 
   @ResolveProperty()
@@ -48,11 +52,11 @@ export class UserResolver {
       getMoviesIds('watchlisted: true'),
     );
     const moviesIds = userMovies.movies.map(m => m.movie);
-    return moviesIds.map(movie => ({
-      id: movie.id,
-      title: movie.tmdbId,
-      year: 2018,
-      overview: 'nssdsdflsdkfsdlfk',
-    }));
+    return Promise.all(
+      moviesIds.map(async ids => {
+        const movie = await this.provider.getMovie(ids);
+        return { id: ids.id, ...movie };
+      }),
+    );
   }
 }

@@ -6,6 +6,8 @@ import { UserModule } from './user/user.module';
 import { MovieModule } from './movie/movie.module';
 import { AuthModule } from './auth/auth.module';
 import { RoomModule } from './room/room.module';
+import { ProviderModule } from './provider/provider.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { RoomModule } from './room/room.module';
     MovieModule,
     AuthModule,
     RoomModule,
+    ProviderModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
