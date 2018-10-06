@@ -5,10 +5,11 @@ import {
   Args,
   Parent,
   Info,
-  Context,
 } from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProviderService } from '../provider/provider.service';
+import { IUserPartial } from './user.interface';
+import { IMovie } from 'movie/movie.interface';
 
 const getMoviesIds = where => `{ 
   movies(where: { ${where} }) { 
@@ -24,12 +25,12 @@ export class UserResolver {
   ) {}
 
   @Query('user')
-  async user(@Args('id') id: string, @Info() info) {
+  async user(@Args('id') id: string, @Info() info): Promise<IUserPartial> {
     return await this.prisma.query.user({ where: { id } }, info);
   }
 
   @ResolveProperty()
-  async moviesWatched(@Parent() user) {
+  async moviesWatched(@Parent() user): Promise<IMovie[]> {
     const { id } = user;
     const userMovies = await this.prisma.query.user(
       { where: { id } },
@@ -45,7 +46,7 @@ export class UserResolver {
   }
 
   @ResolveProperty()
-  async moviesWatchlisted(@Parent() user) {
+  async moviesWatchlisted(@Parent() user): Promise<IMovie[]> {
     const { id } = user;
     const userMovies = await this.prisma.query.user(
       { where: { id } },

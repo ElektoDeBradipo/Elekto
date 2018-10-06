@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TmdbProvider } from './tmdb.provider';
-import { IMovie } from './interfaces/movie-metadata.interface';
+import { IMovie } from '../movie/movie.interface';
 
 @Injectable()
 export class ProviderService {

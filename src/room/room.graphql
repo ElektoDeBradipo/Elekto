@@ -1,5 +1,5 @@
 type Query {
-  room(id: ID!): Room
+  room(id: ID!, mode: RoomModeInput!): Room
 }
 
 type Mutation {
@@ -23,4 +23,9 @@ union RoomResult = Movie
 
 enum RoomType {
   MOVIE
+}
+
+enum RoomModeInput {
+  TRENDING
+  WATCHLISTED
 }

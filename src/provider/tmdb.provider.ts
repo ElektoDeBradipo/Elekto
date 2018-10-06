@@ -1,10 +1,8 @@
-import {
-  IMovieMetadataProvider,
-  IMovie,
-} from './interfaces/movie-metadata.interface';
+import { IMovieMetadataProvider } from './interfaces/movie-metadata.interface';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '../config/config.service';
 import { Tmdb } from 'tmdb';
+import { IMovie } from '../movie/movie.interface';
 
 @Injectable()
 export class TmdbProvider implements IMovieMetadataProvider {

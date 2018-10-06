@@ -119,4 +119,20 @@ mutation {
   ) {
     id
   }
+  createRoom1: createRoom(
+    data: {
+      name: "room1"
+      type: MOVIE
+      owner: { connect: { nickname: "user1" } }
+      members: {
+        connect: [
+          { nickname: "user1" }
+          { nickname: "user2" }
+          { nickname: "user3" }
+        ]
+      }
+    }
+  ) {
+    id
+  }
 }
