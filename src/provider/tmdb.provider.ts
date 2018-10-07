@@ -1,8 +1,8 @@
-import { IMovieMetadataProvider } from './interfaces/movie-metadata.interface';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '../config/config.service';
 import { Tmdb } from 'tmdb';
-import { IMovie } from '../movie/movie.interface';
+import { ConfigService } from '../config/config.service';
+import { IMovie, IMovieFull } from '../movie/movie.interface';
+import { IMovieMetadataProvider } from './interfaces/movie-metadata.interface';
 
 @Injectable()
 export class TmdbProvider implements IMovieMetadataProvider {
@@ -23,9 +23,9 @@ export class TmdbProvider implements IMovieMetadataProvider {
   async getTrendingMovies(
     number: number,
     excludes: string[],
-  ): Promise<IMovie[]> {
+  ): Promise<IMovieFull[]> {
     let fetching = true;
-    const movies: IMovie[] = [];
+    const movies: IMovieFull[] = [];
     let page = 1;
     while (fetching) {
       const response = await this.tmdb.get('movie/popular', { page });
@@ -33,6 +33,7 @@ export class TmdbProvider implements IMovieMetadataProvider {
       for (const { id, title, overview, releaseDate } of response.results) {
         if (excludes.indexOf(`${id}`) == -1) {
           movies.push({
+            id: `${id}`,
             title,
             overview,
             releaseDate: new Date(releaseDate),

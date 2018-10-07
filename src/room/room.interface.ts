@@ -1,6 +1,6 @@
-import { IUserPartial } from '../user/user.interface';
-import { IMoviePartial } from '../movie/movie.interface';
 import { Id } from '../common/common.interface';
+import { IMovieIds, IMoviePartial } from '../movie/movie.interface';
+import { IUserPartial } from '../user/user.interface';
 
 export interface IRoom {
   type: RoomType;
@@ -19,3 +19,11 @@ export enum ResultMode {
   TRENDING = 'TRENDING',
   WATCHLISTED = 'WATCHLISTED',
 }
+
+export interface MovieData {
+  ids: IMovieIds;
+  watched: string[];
+  watchlisted: string[];
+}
+
+export type MovieDataMap = Map<string, MovieData>;

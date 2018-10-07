@@ -10,7 +10,8 @@ export type IMovieFull = IMovie & Id;
 export type IMoviePartial = Partial<IMovieFull>;
 
 export interface IMovieIds {
-  imdbId: string;
-  tmdbId: string;
-  traktId: string;
+  id: string;
+  imdbId?: string;
+  tmdbId?: string;
+  traktId?: string;
 }

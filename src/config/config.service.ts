@@ -12,7 +12,8 @@ export class ConfigService {
   private readonly envConfig: { [key: string]: string };
 
   constructor(filePath: string) {
-    this.envConfig = dotenv.parse(fs.readFileSync(filePath));
+    const config = dotenv.parse(fs.readFileSync(filePath));
+    this.envConfig = this.validateInput(config);
   }
 
   /**
@@ -27,7 +28,9 @@ export class ConfigService {
       DEBUG: Joi.boolean().default(false),
       PRISMA_ENDPOINT: Joi.string().required(),
       TMDB_API_KEY: Joi.string().required(),
-      DEFAULT_RESULT_NUMBER: Joi.number().default(10),
+      DEFAULT_RESULT_NUMBER: Joi.number()
+        .integer()
+        .default(10),
     });
 
     const { error, value: validatedEnvConfig } = Joi.validate(

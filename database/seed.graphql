@@ -32,23 +32,23 @@ mutation {
       movies: {
         create: [
           {
-            watched: true
-            watchlisted: false
+            watched: false
+            watchlisted: true
             movie: { connect: { tmdbId: "335983" } }
           }
           {
-            watched: true
+            watched: false
             watchlisted: false
             movie: { connect: { tmdbId: "363088" } }
           }
           {
             watched: false
-            watchlisted: true
+            watchlisted: false
             movie: { connect: { tmdbId: "299536" } }
           }
           {
-            watched: false
-            watchlisted: true
+            watched: true
+            watchlisted: false
             movie: { connect: { tmdbId: "439079" } }
           }
         ]
@@ -68,18 +68,18 @@ mutation {
             movie: { connect: { tmdbId: "335983" } }
           }
           {
-            watched: true
-            watchlisted: false
+            watched: false
+            watchlisted: true
             movie: { connect: { tmdbId: "363088" } }
           }
           {
-            watched: true
+            watched: false
             watchlisted: false
             movie: { connect: { tmdbId: "299536" } }
           }
           {
             watched: false
-            watchlisted: true
+            watchlisted: false
             movie: { connect: { tmdbId: "439079" } }
           }
         ]
@@ -104,12 +104,12 @@ mutation {
             movie: { connect: { tmdbId: "363088" } }
           }
           {
-            watched: true
-            watchlisted: false
+            watched: false
+            watchlisted: true
             movie: { connect: { tmdbId: "299536" } }
           }
           {
-            watched: true
+            watched: false
             watchlisted: false
             movie: { connect: { tmdbId: "439079" } }
           }
