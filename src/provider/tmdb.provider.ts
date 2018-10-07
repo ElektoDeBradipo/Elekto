@@ -38,13 +38,13 @@ export class TmdbProvider implements IMovieMetadataProvider {
             overview,
             releaseDate: new Date(releaseDate),
           });
-          if (movies.length == number) break;
+          if (movies.length >= number) break;
         }
       }
-      if (movies.length == number) {
+      if (movies.length >= number) {
         fetching = false;
       }
-      if (response.total_pages == page) {
+      if (response.total_pages <= page) {
         fetching = false;
       }
     }
