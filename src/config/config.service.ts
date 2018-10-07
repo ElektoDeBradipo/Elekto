@@ -31,6 +31,7 @@ export class ConfigService {
       DEFAULT_RESULT_NUMBER: Joi.number()
         .integer()
         .default(10),
+      JWT_SECRET: Joi.string().required(),
     });
 
     const { error, value: validatedEnvConfig } = Joi.validate(
@@ -49,6 +50,9 @@ export class ConfigService {
 
   get defaultResultNumber(): number {
     return parseInt(this.envConfig.DEFAULT_RESULT_NUMBER);
+  }
+  get jwtSecret(): string {
+    return this.envConfig.JWT_SECRET;
   }
 
   get(key: string): string {
