@@ -51,9 +51,10 @@ export class AuthResolver {
     @Args('password') password: string,
     @Info() info,
   ): Promise<IAuthPayload> {
+    const hash = createHash('sha256');
     let user: User = await this.prisma.query.user({ where: { email } });
 
-    if (!user || user.password != password)
+    if (!user || user.password != <string>hash.update(password).digest('hex'))
       throw new Error('Email or password wrong !');
 
     let token: string = this.jwt.sign({
