@@ -11,10 +11,11 @@ import { PrismaService } from '../prisma/prisma.service';
 import { User } from '../prisma/prisma.binding';
 import { IUser, IAuthPayload } from './auth.interface';
 import { createHash } from 'crypto';
+import { AuthService } from './auth.service';
 
 @Resolver('AuthPayload')
 export class AuthResolver {
-  constructor(private jwt: JwtService, private prisma: PrismaService) {}
+  constructor(private jwt: JwtService, private prisma: PrismaService, private auth: AuthService) {}
 
   @Mutation()
   async signup(
@@ -38,11 +39,9 @@ export class AuthResolver {
     });
     if (!user) throw new Error('create user failed ! ');
 
-    let token: string = this.jwt.sign({
-      id: user.id,
-      email,
-    });
-    return { token, user: <IUser>user };
+    
+
+    return this.auth.generateJwtToken(user);
   }
 
   @Mutation()
@@ -57,11 +56,6 @@ export class AuthResolver {
     if (!user || user.password != <string>hash.update(password).digest('hex'))
       throw new Error('Email or password wrong !');
 
-    let token: string = this.jwt.sign({
-      id: user.id,
-      email: user.email,
-    });
-
-    return { token, user: <IUser>user };
+    return this.auth.generateJwtToken(user);
   }
 }

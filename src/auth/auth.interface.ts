@@ -9,3 +9,8 @@ export class IAuthPayload {
   token: string;
   user: IUser;
 }
+
+export class IUserToken{
+  id: string
+  email: string
+}

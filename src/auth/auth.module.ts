@@ -4,6 +4,7 @@ import { ConfigService } from '../config/config.service';
 import { ConfigModule } from '../config/config.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { AuthResolver } from './auth.resolver';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { AuthResolver } from './auth.resolver';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthResolver],
+  providers: [AuthResolver, AuthService],
 })
 export class AuthModule {}
