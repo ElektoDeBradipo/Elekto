@@ -1,21 +1,17 @@
-import {
-  Resolver,
-  Mutation,
-  Args,
-  Info,
-  ResolveProperty,
-  Parent,
-} from '@nestjs/graphql';
+import { Args, Info, Mutation, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../prisma/prisma.service';
-import { User } from '../prisma/prisma.binding';
-import { IUser, IAuthPayload } from './auth.interface';
 import { createHash } from 'crypto';
+import { User } from '../prisma/prisma.binding';
+import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from './auth.service';
 
 @Resolver('AuthPayload')
 export class AuthResolver {
-  constructor(private jwt: JwtService, private prisma: PrismaService, private auth: AuthService) {}
+  constructor(
+    private jwt: JwtService,
+    private prisma: PrismaService,
+    private auth: AuthService,
+  ) {}
 
   @Mutation()
   async signup(
@@ -25,7 +21,7 @@ export class AuthResolver {
     @Args('firstName') firstName: string,
     @Args('lastName') lastName: string,
     @Info() info,
-  ): Promise<IAuthPayload> {
+  ): Promise<any> {
     const hash = createHash('sha256');
     let regex: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -39,9 +35,8 @@ export class AuthResolver {
     });
     if (!user) throw new Error('create user failed ! ');
 
-    
-
-    return this.auth.generateJwtToken(user);
+    const token = this.auth.signIn(user);
+    return { token, user };
   }
 
   @Mutation()
@@ -49,13 +44,14 @@ export class AuthResolver {
     @Args('email') email: string,
     @Args('password') password: string,
     @Info() info,
-  ): Promise<IAuthPayload> {
+  ): Promise<any> {
     const hash = createHash('sha256');
     let user: User = await this.prisma.query.user({ where: { email } });
 
     if (!user || user.password != <string>hash.update(password).digest('hex'))
       throw new Error('Email or password wrong !');
 
-    return this.auth.generateJwtToken(user);
+    const token = this.auth.signIn(user);
+    return { token, user };
   }
 }

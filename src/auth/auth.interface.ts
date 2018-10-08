@@ -1,16 +1,12 @@
-export class IUser {
-  nickname: String;
-  email: String;
-  firstName: String;
-  lastName: String;
-}
+import { IUser } from '../user/user.interface';
 
 export class IAuthPayload {
   token: string;
   user: IUser;
 }
 
-export class IUserToken{
-  id: string
-  email: string
+export class JwtPayload {
+  id: string;
+  email: string;
+  iat: Date;
 }

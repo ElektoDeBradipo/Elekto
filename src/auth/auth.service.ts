@@ -1,25 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { IAuthPayload, IUser, IUserToken } from './auth.interface';
 import { User } from '../prisma/prisma.binding';
-
+import { PrismaService } from '../prisma/prisma.service';
+import { IUserPartial } from '../user/user.interface';
+import { JwtPayload } from './auth.interface';
 
 @Injectable()
 export class AuthService {
+  constructor(private jwt: JwtService, private prisma: PrismaService) {}
 
-    constructor(private jwt: JwtService){}
+  signIn(user: User): string {
+    if (!user) throw new Error('user is null');
 
-    generateJwtToken(user: User): IAuthPayload{
-        if(!user) throw new Error("user is null");
+    return this.jwt.sign({
+      id: user.id,
+      email: user.email,
+    });
+  }
 
-        let token: string = this.jwt.sign({
-            id: user.id,
-            email: user.email
-        });
-        return {token, user:<IUser> user};
-    }
-
-    validateJwtToken(token: string): IUserToken{
-        return this.jwt.verify(token)
-    }
+  async validateUser(token: JwtPayload): Promise<IUserPartial> {
+    return <IUserPartial>(
+      await this.prisma.query.user({ where: { id: token.id } })
+    );
+  }
 }

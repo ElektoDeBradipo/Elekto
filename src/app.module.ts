@@ -14,6 +14,7 @@ import { CommonModule } from './common/common.module';
     ConfigModule,
     GraphQLModule.forRoot({
       typePaths: ['./src/**/*.graphql'],
+      context: ({ req }) => ({ req }),
     }),
     PrismaModule,
     UserModule,
