@@ -2,3 +2,6 @@ endpoint: http://localhost:4466
 datamodel: database/datamodel.prisma
 seed:
   import: database/seed.graphql
+generate:
+  - generator: typescript-client
+    output: src/prisma/prisma.binding

@@ -16,6 +16,7 @@ type MovieRelation {
   watched: Boolean!
   watchlisted: Boolean!
   movie: Movie!
+  user: User! @relation(name: "UserMovies")
 }
 
 type Movie {

@@ -4,23 +4,23 @@ import { Options } from 'graphql-binding'
 import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding'
 
 export interface Query {
-    rooms: <T = Room[]>(args: { where?: RoomWhereInput, orderBy?: RoomOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     movieRelations: <T = MovieRelation[]>(args: { where?: MovieRelationWhereInput, orderBy?: MovieRelationOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    rooms: <T = Room[]>(args: { where?: RoomWhereInput, orderBy?: RoomOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     users: <T = User[]>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     movies: <T = Movie[]>(args: { where?: MovieWhereInput, orderBy?: MovieOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     room: <T = Room | null>(args: { where: RoomWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     movie: <T = Movie | null>(args: { where: MovieWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    roomsConnection: <T = RoomConnection>(args: { where?: RoomWhereInput, orderBy?: RoomOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     movieRelationsConnection: <T = MovieRelationConnection>(args: { where?: MovieRelationWhereInput, orderBy?: MovieRelationOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    roomsConnection: <T = RoomConnection>(args: { where?: RoomWhereInput, orderBy?: RoomOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     usersConnection: <T = UserConnection>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     moviesConnection: <T = MovieConnection>(args: { where?: MovieWhereInput, orderBy?: MovieOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Mutation {
-    createRoom: <T = Room>(args: { data: RoomCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createMovieRelation: <T = MovieRelation>(args: { data: MovieRelationCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createRoom: <T = Room>(args: { data: RoomCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createUser: <T = User>(args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createMovie: <T = Movie>(args: { data: MovieCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateRoom: <T = Room | null>(args: { data: RoomUpdateInput, where: RoomWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
@@ -32,26 +32,26 @@ export interface Mutation {
     upsertRoom: <T = Room>(args: { where: RoomWhereUniqueInput, create: RoomCreateInput, update: RoomUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertMovie: <T = Movie>(args: { where: MovieWhereUniqueInput, create: MovieCreateInput, update: MovieUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyRooms: <T = BatchPayload>(args: { data: RoomUpdateInput, where?: RoomWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyMovieRelations: <T = BatchPayload>(args: { data: MovieRelationUpdateInput, where?: MovieRelationWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyRooms: <T = BatchPayload>(args: { data: RoomUpdateInput, where?: RoomWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyMovies: <T = BatchPayload>(args: { data: MovieUpdateInput, where?: MovieWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyRooms: <T = BatchPayload>(args: { where?: RoomWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyMovieRelations: <T = BatchPayload>(args: { where?: MovieRelationWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyRooms: <T = BatchPayload>(args: { where?: RoomWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyMovies: <T = BatchPayload>(args: { where?: MovieWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Subscription {
-    room: <T = RoomSubscriptionPayload | null>(args: { where?: RoomSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     movieRelation: <T = MovieRelationSubscriptionPayload | null>(args: { where?: MovieRelationSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    room: <T = RoomSubscriptionPayload | null>(args: { where?: RoomSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     user: <T = UserSubscriptionPayload | null>(args: { where?: UserSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     movie: <T = MovieSubscriptionPayload | null>(args: { where?: MovieSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
   }
 
 export interface Exists {
-  Room: (where?: RoomWhereInput) => Promise<boolean>
   MovieRelation: (where?: MovieRelationWhereInput) => Promise<boolean>
+  Room: (where?: RoomWhereInput) => Promise<boolean>
   User: (where?: UserWhereInput) => Promise<boolean>
   Movie: (where?: MovieWhereInput) => Promise<boolean>
 }
@@ -172,6 +172,7 @@ type MovieRelation {
   watched: Boolean!
   watchlisted: Boolean!
   movie(where: MovieWhereInput): Movie!
+  user(where: UserWhereInput): User!
 }
 
 """A connection to a list of items."""
@@ -188,10 +189,17 @@ input MovieRelationCreateInput {
   watched: Boolean!
   watchlisted: Boolean!
   movie: MovieCreateOneInput!
+  user: UserCreateOneWithoutMoviesInput!
 }
 
-input MovieRelationCreateManyInput {
-  create: [MovieRelationCreateInput!]
+input MovieRelationCreateManyWithoutUserInput {
+  create: [MovieRelationCreateWithoutUserInput!]
+}
+
+input MovieRelationCreateWithoutUserInput {
+  watched: Boolean!
+  watchlisted: Boolean!
+  movie: MovieCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -264,10 +272,11 @@ input MovieRelationUpdateInput {
   watched: Boolean
   watchlisted: Boolean
   movie: MovieUpdateOneRequiredInput
+  user: UserUpdateOneRequiredWithoutMoviesInput
 }
 
-input MovieRelationUpdateManyInput {
-  create: [MovieRelationCreateInput!]
+input MovieRelationUpdateManyWithoutUserInput {
+  create: [MovieRelationCreateWithoutUserInput!]
 }
 
 input MovieRelationWhereInput {
@@ -288,6 +297,7 @@ input MovieRelationWhereInput {
   """All values that are not equal to given value."""
   watchlisted_not: Boolean
   movie: MovieWhereInput
+  user: UserWhereInput
 }
 
 type MovieSubscriptionPayload {
@@ -554,8 +564,8 @@ input MovieWhereUniqueInput {
 }
 
 type Mutation {
-  createRoom(data: RoomCreateInput!): Room!
   createMovieRelation(data: MovieRelationCreateInput!): MovieRelation!
+  createRoom(data: RoomCreateInput!): Room!
   createUser(data: UserCreateInput!): User!
   createMovie(data: MovieCreateInput!): Movie!
   updateRoom(data: RoomUpdateInput!, where: RoomWhereUniqueInput!): Room
@@ -567,12 +577,12 @@ type Mutation {
   upsertRoom(where: RoomWhereUniqueInput!, create: RoomCreateInput!, update: RoomUpdateInput!): Room!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertMovie(where: MovieWhereUniqueInput!, create: MovieCreateInput!, update: MovieUpdateInput!): Movie!
-  updateManyRooms(data: RoomUpdateInput!, where: RoomWhereInput): BatchPayload!
   updateManyMovieRelations(data: MovieRelationUpdateInput!, where: MovieRelationWhereInput): BatchPayload!
+  updateManyRooms(data: RoomUpdateInput!, where: RoomWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   updateManyMovies(data: MovieUpdateInput!, where: MovieWhereInput): BatchPayload!
-  deleteManyRooms(where: RoomWhereInput): BatchPayload!
   deleteManyMovieRelations(where: MovieRelationWhereInput): BatchPayload!
+  deleteManyRooms(where: RoomWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyMovies(where: MovieWhereInput): BatchPayload!
 }
@@ -605,15 +615,15 @@ type PageInfo {
 }
 
 type Query {
-  rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room]!
   movieRelations(where: MovieRelationWhereInput, orderBy: MovieRelationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MovieRelation]!
+  rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   movies(where: MovieWhereInput, orderBy: MovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Movie]!
   room(where: RoomWhereUniqueInput!): Room
   user(where: UserWhereUniqueInput!): User
   movie(where: MovieWhereUniqueInput!): Movie
-  roomsConnection(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RoomConnection!
   movieRelationsConnection(where: MovieRelationWhereInput, orderBy: MovieRelationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MovieRelationConnection!
+  roomsConnection(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RoomConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   moviesConnection(where: MovieWhereInput, orderBy: MovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MovieConnection!
 
@@ -959,8 +969,8 @@ input RoomWhereUniqueInput {
 }
 
 type Subscription {
-  room(where: RoomSubscriptionWhereInput): RoomSubscriptionPayload
   movieRelation(where: MovieRelationSubscriptionWhereInput): MovieRelationSubscriptionPayload
+  room(where: RoomSubscriptionWhereInput): RoomSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   movie(where: MovieSubscriptionWhereInput): MovieSubscriptionPayload
 }
@@ -996,7 +1006,7 @@ input UserCreateInput {
   firstName: String
   lastName: String
   friends: UserCreateManyInput
-  movies: MovieRelationCreateManyInput
+  movies: MovieRelationCreateManyWithoutUserInput
   rooms: RoomCreateManyWithoutMembersInput
   ownedRooms: RoomCreateManyWithoutOwnerInput
 }
@@ -1011,9 +1021,25 @@ input UserCreateManyWithoutRoomsInput {
   connect: [UserWhereUniqueInput!]
 }
 
+input UserCreateOneWithoutMoviesInput {
+  create: UserCreateWithoutMoviesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutOwnedRoomsInput {
   create: UserCreateWithoutOwnedRoomsInput
   connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutMoviesInput {
+  email: String!
+  password: String!
+  nickname: String!
+  firstName: String
+  lastName: String
+  friends: UserCreateManyInput
+  rooms: RoomCreateManyWithoutMembersInput
+  ownedRooms: RoomCreateManyWithoutOwnerInput
 }
 
 input UserCreateWithoutOwnedRoomsInput {
@@ -1023,7 +1049,7 @@ input UserCreateWithoutOwnedRoomsInput {
   firstName: String
   lastName: String
   friends: UserCreateManyInput
-  movies: MovieRelationCreateManyInput
+  movies: MovieRelationCreateManyWithoutUserInput
   rooms: RoomCreateManyWithoutMembersInput
 }
 
@@ -1034,7 +1060,7 @@ input UserCreateWithoutRoomsInput {
   firstName: String
   lastName: String
   friends: UserCreateManyInput
-  movies: MovieRelationCreateManyInput
+  movies: MovieRelationCreateManyWithoutUserInput
   ownedRooms: RoomCreateManyWithoutOwnerInput
 }
 
@@ -1122,7 +1148,7 @@ input UserUpdateDataInput {
   firstName: String
   lastName: String
   friends: UserUpdateManyInput
-  movies: MovieRelationUpdateManyInput
+  movies: MovieRelationUpdateManyWithoutUserInput
   rooms: RoomUpdateManyWithoutMembersInput
   ownedRooms: RoomUpdateManyWithoutOwnerInput
 }
@@ -1134,7 +1160,7 @@ input UserUpdateInput {
   firstName: String
   lastName: String
   friends: UserUpdateManyInput
-  movies: MovieRelationUpdateManyInput
+  movies: MovieRelationUpdateManyWithoutUserInput
   rooms: RoomUpdateManyWithoutMembersInput
   ownedRooms: RoomUpdateManyWithoutOwnerInput
 }
@@ -1157,11 +1183,29 @@ input UserUpdateManyWithoutRoomsInput {
   upsert: [UserUpsertWithWhereUniqueWithoutRoomsInput!]
 }
 
+input UserUpdateOneRequiredWithoutMoviesInput {
+  create: UserCreateWithoutMoviesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutMoviesDataInput
+  upsert: UserUpsertWithoutMoviesInput
+}
+
 input UserUpdateOneRequiredWithoutOwnedRoomsInput {
   create: UserCreateWithoutOwnedRoomsInput
   connect: UserWhereUniqueInput
   update: UserUpdateWithoutOwnedRoomsDataInput
   upsert: UserUpsertWithoutOwnedRoomsInput
+}
+
+input UserUpdateWithoutMoviesDataInput {
+  email: String
+  password: String
+  nickname: String
+  firstName: String
+  lastName: String
+  friends: UserUpdateManyInput
+  rooms: RoomUpdateManyWithoutMembersInput
+  ownedRooms: RoomUpdateManyWithoutOwnerInput
 }
 
 input UserUpdateWithoutOwnedRoomsDataInput {
@@ -1171,7 +1215,7 @@ input UserUpdateWithoutOwnedRoomsDataInput {
   firstName: String
   lastName: String
   friends: UserUpdateManyInput
-  movies: MovieRelationUpdateManyInput
+  movies: MovieRelationUpdateManyWithoutUserInput
   rooms: RoomUpdateManyWithoutMembersInput
 }
 
@@ -1182,7 +1226,7 @@ input UserUpdateWithoutRoomsDataInput {
   firstName: String
   lastName: String
   friends: UserUpdateManyInput
-  movies: MovieRelationUpdateManyInput
+  movies: MovieRelationUpdateManyWithoutUserInput
   ownedRooms: RoomUpdateManyWithoutOwnerInput
 }
 
@@ -1194,6 +1238,11 @@ input UserUpdateWithWhereUniqueNestedInput {
 input UserUpdateWithWhereUniqueWithoutRoomsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutRoomsDataInput!
+}
+
+input UserUpsertWithoutMoviesInput {
+  update: UserUpdateWithoutMoviesDataInput!
+  create: UserCreateWithoutMoviesInput!
 }
 
 input UserUpsertWithoutOwnedRoomsInput {
@@ -1511,16 +1560,18 @@ export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDe
  * Types
 */
 
-export type RoomOrderByInput =   'id_ASC' |
+export type RoomType =   'MOVIE'
+
+export type MovieRelationOrderByInput =   'watched_ASC' |
+  'watched_DESC' |
+  'watchlisted_ASC' |
+  'watchlisted_DESC' |
+  'id_ASC' |
   'id_DESC' |
-  'type_ASC' |
-  'type_DESC' |
-  'name_ASC' |
-  'name_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC' |
   'updatedAt_ASC' |
-  'updatedAt_DESC'
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
 
 export type UserOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -1539,16 +1590,16 @@ export type UserOrderByInput =   'id_ASC' |
   'updatedAt_ASC' |
   'updatedAt_DESC'
 
-export type MovieRelationOrderByInput =   'watched_ASC' |
-  'watched_DESC' |
-  'watchlisted_ASC' |
-  'watchlisted_DESC' |
-  'id_ASC' |
+export type RoomOrderByInput =   'id_ASC' |
   'id_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
+  'type_ASC' |
+  'type_DESC' |
+  'name_ASC' |
+  'name_DESC' |
   'createdAt_ASC' |
-  'createdAt_DESC'
+  'createdAt_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC'
 
 export type MovieOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -1567,11 +1618,29 @@ export type MutationType =   'CREATED' |
   'UPDATED' |
   'DELETED'
 
-export type RoomType =   'MOVIE'
+export interface RoomCreateWithoutOwnerInput {
+  type: RoomType
+  name: String
+  members?: UserCreateManyWithoutRoomsInput
+}
 
-export interface RoomCreateManyWithoutOwnerInput {
-  create?: RoomCreateWithoutOwnerInput[] | RoomCreateWithoutOwnerInput
-  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
+export interface MovieRelationWhereInput {
+  AND?: MovieRelationWhereInput[] | MovieRelationWhereInput
+  OR?: MovieRelationWhereInput[] | MovieRelationWhereInput
+  NOT?: MovieRelationWhereInput[] | MovieRelationWhereInput
+  watched?: Boolean
+  watched_not?: Boolean
+  watchlisted?: Boolean
+  watchlisted_not?: Boolean
+  movie?: MovieWhereInput
+  user?: UserWhereInput
+}
+
+export interface RoomUpdateInput {
+  type?: RoomType
+  name?: String
+  owner?: UserUpdateOneRequiredWithoutOwnedRoomsInput
+  members?: UserUpdateManyWithoutRoomsInput
 }
 
 export interface RoomWhereInput {
@@ -1632,103 +1701,26 @@ export interface RoomWhereInput {
   members_none?: UserWhereInput
 }
 
-export interface RoomUpdateInput {
-  type?: RoomType
-  name?: String
-  owner?: UserUpdateOneRequiredWithoutOwnedRoomsInput
-  members?: UserUpdateManyWithoutRoomsInput
-}
-
-export interface MovieWhereInput {
-  AND?: MovieWhereInput[] | MovieWhereInput
-  OR?: MovieWhereInput[] | MovieWhereInput
-  NOT?: MovieWhereInput[] | MovieWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  tmdbId?: String
-  tmdbId_not?: String
-  tmdbId_in?: String[] | String
-  tmdbId_not_in?: String[] | String
-  tmdbId_lt?: String
-  tmdbId_lte?: String
-  tmdbId_gt?: String
-  tmdbId_gte?: String
-  tmdbId_contains?: String
-  tmdbId_not_contains?: String
-  tmdbId_starts_with?: String
-  tmdbId_not_starts_with?: String
-  tmdbId_ends_with?: String
-  tmdbId_not_ends_with?: String
-  imdbId?: String
-  imdbId_not?: String
-  imdbId_in?: String[] | String
-  imdbId_not_in?: String[] | String
-  imdbId_lt?: String
-  imdbId_lte?: String
-  imdbId_gt?: String
-  imdbId_gte?: String
-  imdbId_contains?: String
-  imdbId_not_contains?: String
-  imdbId_starts_with?: String
-  imdbId_not_starts_with?: String
-  imdbId_ends_with?: String
-  imdbId_not_ends_with?: String
-  traktId?: String
-  traktId_not?: String
-  traktId_in?: String[] | String
-  traktId_not_in?: String[] | String
-  traktId_lt?: String
-  traktId_lte?: String
-  traktId_gt?: String
-  traktId_gte?: String
-  traktId_contains?: String
-  traktId_not_contains?: String
-  traktId_starts_with?: String
-  traktId_not_starts_with?: String
-  traktId_ends_with?: String
-  traktId_not_ends_with?: String
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-}
-
-export interface UserCreateOneWithoutOwnedRoomsInput {
-  create?: UserCreateWithoutOwnedRoomsInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface RoomUpsertWithWhereUniqueWithoutMembersInput {
-  where: RoomWhereUniqueInput
-  update: RoomUpdateWithoutMembersDataInput
-  create: RoomCreateWithoutMembersInput
-}
-
-export interface UserCreateWithoutOwnedRoomsInput {
+export interface UserCreateWithoutMoviesInput {
   email: String
   password: String
   nickname: String
   firstName?: String
   lastName?: String
   friends?: UserCreateManyInput
-  movies?: MovieRelationCreateManyInput
   rooms?: RoomCreateManyWithoutMembersInput
+  ownedRooms?: RoomCreateManyWithoutOwnerInput
+}
+
+export interface RoomUpdateWithoutOwnerDataInput {
+  type?: RoomType
+  name?: String
+  members?: UserUpdateManyWithoutRoomsInput
+}
+
+export interface UserCreateManyInput {
+  create?: UserCreateInput[] | UserCreateInput
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
 }
 
 export interface UserUpdateOneRequiredWithoutOwnedRoomsInput {
@@ -1738,22 +1730,6 @@ export interface UserUpdateOneRequiredWithoutOwnedRoomsInput {
   upsert?: UserUpsertWithoutOwnedRoomsInput
 }
 
-export interface UserCreateManyInput {
-  create?: UserCreateInput[] | UserCreateInput
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-}
-
-export interface MovieSubscriptionWhereInput {
-  AND?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput
-  OR?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput
-  NOT?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: MovieWhereInput
-}
-
 export interface UserCreateInput {
   email: String
   password: String
@@ -1761,9 +1737,169 @@ export interface UserCreateInput {
   firstName?: String
   lastName?: String
   friends?: UserCreateManyInput
-  movies?: MovieRelationCreateManyInput
+  movies?: MovieRelationCreateManyWithoutUserInput
   rooms?: RoomCreateManyWithoutMembersInput
   ownedRooms?: RoomCreateManyWithoutOwnerInput
+}
+
+export interface RoomSubscriptionWhereInput {
+  AND?: RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput
+  OR?: RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput
+  NOT?: RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: RoomWhereInput
+}
+
+export interface MovieRelationCreateManyWithoutUserInput {
+  create?: MovieRelationCreateWithoutUserInput[] | MovieRelationCreateWithoutUserInput
+}
+
+export interface MovieRelationSubscriptionWhereInput {
+  AND?: MovieRelationSubscriptionWhereInput[] | MovieRelationSubscriptionWhereInput
+  OR?: MovieRelationSubscriptionWhereInput[] | MovieRelationSubscriptionWhereInput
+  NOT?: MovieRelationSubscriptionWhereInput[] | MovieRelationSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: MovieRelationWhereInput
+}
+
+export interface MovieRelationCreateWithoutUserInput {
+  watched: Boolean
+  watchlisted: Boolean
+  movie: MovieCreateOneInput
+}
+
+export interface RoomWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface RoomCreateManyWithoutMembersInput {
+  create?: RoomCreateWithoutMembersInput[] | RoomCreateWithoutMembersInput
+  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
+}
+
+export interface MovieWhereUniqueInput {
+  id?: ID_Input
+  tmdbId?: String
+  imdbId?: String
+  traktId?: String
+}
+
+export interface RoomCreateWithoutMembersInput {
+  type: RoomType
+  name: String
+  owner: UserCreateOneWithoutOwnedRoomsInput
+}
+
+export interface UserUpdateOneRequiredWithoutMoviesInput {
+  create?: UserCreateWithoutMoviesInput
+  connect?: UserWhereUniqueInput
+  update?: UserUpdateWithoutMoviesDataInput
+  upsert?: UserUpsertWithoutMoviesInput
+}
+
+export interface UserCreateOneWithoutOwnedRoomsInput {
+  create?: UserCreateWithoutOwnedRoomsInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface MovieUpdateDataInput {
+  tmdbId?: String
+  imdbId?: String
+  traktId?: String
+}
+
+export interface UserCreateWithoutOwnedRoomsInput {
+  email: String
+  password: String
+  nickname: String
+  firstName?: String
+  lastName?: String
+  friends?: UserCreateManyInput
+  movies?: MovieRelationCreateManyWithoutUserInput
+  rooms?: RoomCreateManyWithoutMembersInput
+}
+
+export interface MovieRelationUpdateInput {
+  watched?: Boolean
+  watchlisted?: Boolean
+  movie?: MovieUpdateOneRequiredInput
+  user?: UserUpdateOneRequiredWithoutMoviesInput
+}
+
+export interface RoomCreateManyWithoutOwnerInput {
+  create?: RoomCreateWithoutOwnerInput[] | RoomCreateWithoutOwnerInput
+  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
+}
+
+export interface UserUpdateInput {
+  email?: String
+  password?: String
+  nickname?: String
+  firstName?: String
+  lastName?: String
+  friends?: UserUpdateManyInput
+  movies?: MovieRelationUpdateManyWithoutUserInput
+  rooms?: RoomUpdateManyWithoutMembersInput
+  ownedRooms?: RoomUpdateManyWithoutOwnerInput
+}
+
+export interface UserUpdateWithWhereUniqueWithoutRoomsInput {
+  where: UserWhereUniqueInput
+  data: UserUpdateWithoutRoomsDataInput
+}
+
+export interface UserUpsertWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput
+  update: UserUpdateDataInput
+  create: UserCreateInput
+}
+
+export interface UserCreateManyWithoutRoomsInput {
+  create?: UserCreateWithoutRoomsInput[] | UserCreateWithoutRoomsInput
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+}
+
+export interface UserUpsertWithWhereUniqueWithoutRoomsInput {
+  where: UserWhereUniqueInput
+  update: UserUpdateWithoutRoomsDataInput
+  create: UserCreateWithoutRoomsInput
+}
+
+export interface UserCreateWithoutRoomsInput {
+  email: String
+  password: String
+  nickname: String
+  firstName?: String
+  lastName?: String
+  friends?: UserCreateManyInput
+  movies?: MovieRelationCreateManyWithoutUserInput
+  ownedRooms?: RoomCreateManyWithoutOwnerInput
+}
+
+export interface MovieRelationCreateInput {
+  watched: Boolean
+  watchlisted: Boolean
+  movie: MovieCreateOneInput
+  user: UserCreateOneWithoutMoviesInput
+}
+
+export interface RoomCreateInput {
+  type: RoomType
+  name: String
+  owner: UserCreateOneWithoutOwnedRoomsInput
+  members?: UserCreateManyWithoutRoomsInput
+}
+
+export interface MovieCreateInput {
+  tmdbId?: String
+  imdbId?: String
+  traktId?: String
 }
 
 export interface UserWhereInput {
@@ -1876,170 +2012,94 @@ export interface UserWhereInput {
   ownedRooms_none?: RoomWhereInput
 }
 
-export interface MovieRelationCreateManyInput {
-  create?: MovieRelationCreateInput[] | MovieRelationCreateInput
-}
-
-export interface MovieRelationSubscriptionWhereInput {
-  AND?: MovieRelationSubscriptionWhereInput[] | MovieRelationSubscriptionWhereInput
-  OR?: MovieRelationSubscriptionWhereInput[] | MovieRelationSubscriptionWhereInput
-  NOT?: MovieRelationSubscriptionWhereInput[] | MovieRelationSubscriptionWhereInput
+export interface MovieSubscriptionWhereInput {
+  AND?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput
+  OR?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput
+  NOT?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput
   mutation_in?: MutationType[] | MutationType
   updatedFields_contains?: String
   updatedFields_contains_every?: String[] | String
   updatedFields_contains_some?: String[] | String
-  node?: MovieRelationWhereInput
+  node?: MovieWhereInput
 }
 
-export interface MovieRelationCreateInput {
-  watched: Boolean
-  watchlisted: Boolean
-  movie: MovieCreateOneInput
-}
-
-export interface RoomWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface MovieCreateOneInput {
-  create?: MovieCreateInput
-  connect?: MovieWhereUniqueInput
-}
-
-export interface MovieWhereUniqueInput {
-  id?: ID_Input
-  tmdbId?: String
-  imdbId?: String
-  traktId?: String
-}
-
-export interface MovieCreateInput {
-  tmdbId?: String
-  imdbId?: String
-  traktId?: String
-}
-
-export interface MovieUpdateDataInput {
-  tmdbId?: String
-  imdbId?: String
-  traktId?: String
-}
-
-export interface RoomCreateManyWithoutMembersInput {
-  create?: RoomCreateWithoutMembersInput[] | RoomCreateWithoutMembersInput
-  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
-}
-
-export interface MovieRelationUpdateInput {
-  watched?: Boolean
-  watchlisted?: Boolean
-  movie?: MovieUpdateOneRequiredInput
-}
-
-export interface RoomCreateWithoutMembersInput {
-  type: RoomType
-  name: String
-  owner: UserCreateOneWithoutOwnedRoomsInput
-}
-
-export interface UserUpdateInput {
-  email?: String
-  password?: String
-  nickname?: String
-  firstName?: String
-  lastName?: String
-  friends?: UserUpdateManyInput
-  movies?: MovieRelationUpdateManyInput
-  rooms?: RoomUpdateManyWithoutMembersInput
-  ownedRooms?: RoomUpdateManyWithoutOwnerInput
-}
-
-export interface RoomUpdateWithoutOwnerDataInput {
-  type?: RoomType
-  name?: String
-  members?: UserUpdateManyWithoutRoomsInput
-}
-
-export interface UserUpsertWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput
-  update: UserUpdateDataInput
-  create: UserCreateInput
-}
-
-export interface RoomCreateWithoutOwnerInput {
-  type: RoomType
-  name: String
-  members?: UserCreateManyWithoutRoomsInput
-}
-
-export interface UserUpsertWithWhereUniqueWithoutRoomsInput {
-  where: UserWhereUniqueInput
-  update: UserUpdateWithoutRoomsDataInput
-  create: UserCreateWithoutRoomsInput
-}
-
-export interface UserCreateManyWithoutRoomsInput {
+export interface UserUpdateManyWithoutRoomsInput {
   create?: UserCreateWithoutRoomsInput[] | UserCreateWithoutRoomsInput
   connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  update?: UserUpdateWithWhereUniqueWithoutRoomsInput[] | UserUpdateWithWhereUniqueWithoutRoomsInput
+  upsert?: UserUpsertWithWhereUniqueWithoutRoomsInput[] | UserUpsertWithWhereUniqueWithoutRoomsInput
 }
 
-export interface UserUpdateWithWhereUniqueWithoutRoomsInput {
-  where: UserWhereUniqueInput
-  data: UserUpdateWithoutRoomsDataInput
-}
-
-export interface UserCreateWithoutRoomsInput {
-  email: String
-  password: String
-  nickname: String
-  firstName?: String
-  lastName?: String
-  friends?: UserCreateManyInput
-  movies?: MovieRelationCreateManyInput
-  ownedRooms?: RoomCreateManyWithoutOwnerInput
-}
-
-export interface RoomCreateInput {
-  type: RoomType
-  name: String
-  owner: UserCreateOneWithoutOwnedRoomsInput
-  members?: UserCreateManyWithoutRoomsInput
-}
-
-export interface RoomUpdateWithWhereUniqueWithoutOwnerInput {
-  where: RoomWhereUniqueInput
-  data: RoomUpdateWithoutOwnerDataInput
-}
-
-export interface MovieRelationWhereInput {
-  AND?: MovieRelationWhereInput[] | MovieRelationWhereInput
-  OR?: MovieRelationWhereInput[] | MovieRelationWhereInput
-  NOT?: MovieRelationWhereInput[] | MovieRelationWhereInput
-  watched?: Boolean
-  watched_not?: Boolean
-  watchlisted?: Boolean
-  watchlisted_not?: Boolean
-  movie?: MovieWhereInput
-}
-
-export interface RoomUpdateManyWithoutOwnerInput {
-  create?: RoomCreateWithoutOwnerInput[] | RoomCreateWithoutOwnerInput
-  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
-  disconnect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
-  delete?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
-  update?: RoomUpdateWithWhereUniqueWithoutOwnerInput[] | RoomUpdateWithWhereUniqueWithoutOwnerInput
-  upsert?: RoomUpsertWithWhereUniqueWithoutOwnerInput[] | RoomUpsertWithWhereUniqueWithoutOwnerInput
-}
-
-export interface RoomSubscriptionWhereInput {
-  AND?: RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput
-  OR?: RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput
-  NOT?: RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: RoomWhereInput
+export interface MovieWhereInput {
+  AND?: MovieWhereInput[] | MovieWhereInput
+  OR?: MovieWhereInput[] | MovieWhereInput
+  NOT?: MovieWhereInput[] | MovieWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  tmdbId?: String
+  tmdbId_not?: String
+  tmdbId_in?: String[] | String
+  tmdbId_not_in?: String[] | String
+  tmdbId_lt?: String
+  tmdbId_lte?: String
+  tmdbId_gt?: String
+  tmdbId_gte?: String
+  tmdbId_contains?: String
+  tmdbId_not_contains?: String
+  tmdbId_starts_with?: String
+  tmdbId_not_starts_with?: String
+  tmdbId_ends_with?: String
+  tmdbId_not_ends_with?: String
+  imdbId?: String
+  imdbId_not?: String
+  imdbId_in?: String[] | String
+  imdbId_not_in?: String[] | String
+  imdbId_lt?: String
+  imdbId_lte?: String
+  imdbId_gt?: String
+  imdbId_gte?: String
+  imdbId_contains?: String
+  imdbId_not_contains?: String
+  imdbId_starts_with?: String
+  imdbId_not_starts_with?: String
+  imdbId_ends_with?: String
+  imdbId_not_ends_with?: String
+  traktId?: String
+  traktId_not?: String
+  traktId_in?: String[] | String
+  traktId_not_in?: String[] | String
+  traktId_lt?: String
+  traktId_lte?: String
+  traktId_gt?: String
+  traktId_gte?: String
+  traktId_contains?: String
+  traktId_not_contains?: String
+  traktId_starts_with?: String
+  traktId_not_starts_with?: String
+  traktId_ends_with?: String
+  traktId_not_ends_with?: String
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
 }
 
 export interface UserUpdateWithoutOwnedRoomsDataInput {
@@ -2049,13 +2109,14 @@ export interface UserUpdateWithoutOwnedRoomsDataInput {
   firstName?: String
   lastName?: String
   friends?: UserUpdateManyInput
-  movies?: MovieRelationUpdateManyInput
+  movies?: MovieRelationUpdateManyWithoutUserInput
   rooms?: RoomUpdateManyWithoutMembersInput
 }
 
-export interface MovieUpsertNestedInput {
-  update: MovieUpdateDataInput
-  create: MovieCreateInput
+export interface UserWhereUniqueInput {
+  id?: ID_Input
+  email?: String
+  nickname?: String
 }
 
 export interface UserUpdateManyInput {
@@ -2067,10 +2128,9 @@ export interface UserUpdateManyInput {
   upsert?: UserUpsertWithWhereUniqueNestedInput[] | UserUpsertWithWhereUniqueNestedInput
 }
 
-export interface MovieUpdateInput {
-  tmdbId?: String
-  imdbId?: String
-  traktId?: String
+export interface MovieUpsertNestedInput {
+  update: MovieUpdateDataInput
+  create: MovieCreateInput
 }
 
 export interface UserUpdateWithWhereUniqueNestedInput {
@@ -2078,10 +2138,10 @@ export interface UserUpdateWithWhereUniqueNestedInput {
   data: UserUpdateDataInput
 }
 
-export interface RoomUpsertWithWhereUniqueWithoutOwnerInput {
-  where: RoomWhereUniqueInput
-  update: RoomUpdateWithoutOwnerDataInput
-  create: RoomCreateWithoutOwnerInput
+export interface MovieUpdateInput {
+  tmdbId?: String
+  imdbId?: String
+  traktId?: String
 }
 
 export interface UserUpdateDataInput {
@@ -2091,18 +2151,33 @@ export interface UserUpdateDataInput {
   firstName?: String
   lastName?: String
   friends?: UserUpdateManyInput
-  movies?: MovieRelationUpdateManyInput
+  movies?: MovieRelationUpdateManyWithoutUserInput
   rooms?: RoomUpdateManyWithoutMembersInput
   ownedRooms?: RoomUpdateManyWithoutOwnerInput
 }
 
-export interface UserUpdateManyWithoutRoomsInput {
-  create?: UserCreateWithoutRoomsInput[] | UserCreateWithoutRoomsInput
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  update?: UserUpdateWithWhereUniqueWithoutRoomsInput[] | UserUpdateWithWhereUniqueWithoutRoomsInput
-  upsert?: UserUpsertWithWhereUniqueWithoutRoomsInput[] | UserUpsertWithWhereUniqueWithoutRoomsInput
+export interface RoomUpsertWithWhereUniqueWithoutOwnerInput {
+  where: RoomWhereUniqueInput
+  update: RoomUpdateWithoutOwnerDataInput
+  create: RoomCreateWithoutOwnerInput
+}
+
+export interface MovieRelationUpdateManyWithoutUserInput {
+  create?: MovieRelationCreateWithoutUserInput[] | MovieRelationCreateWithoutUserInput
+}
+
+export interface MovieCreateOneInput {
+  create?: MovieCreateInput
+  connect?: MovieWhereUniqueInput
+}
+
+export interface RoomUpdateManyWithoutMembersInput {
+  create?: RoomCreateWithoutMembersInput[] | RoomCreateWithoutMembersInput
+  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
+  disconnect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
+  delete?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
+  update?: RoomUpdateWithWhereUniqueWithoutMembersInput[] | RoomUpdateWithWhereUniqueWithoutMembersInput
+  upsert?: RoomUpsertWithWhereUniqueWithoutMembersInput[] | RoomUpsertWithWhereUniqueWithoutMembersInput
 }
 
 export interface UserSubscriptionWhereInput {
@@ -2116,34 +2191,63 @@ export interface UserSubscriptionWhereInput {
   node?: UserWhereInput
 }
 
+export interface RoomUpdateWithWhereUniqueWithoutMembersInput {
+  where: RoomWhereUniqueInput
+  data: RoomUpdateWithoutMembersDataInput
+}
+
+export interface UserUpdateWithoutMoviesDataInput {
+  email?: String
+  password?: String
+  nickname?: String
+  firstName?: String
+  lastName?: String
+  friends?: UserUpdateManyInput
+  rooms?: RoomUpdateManyWithoutMembersInput
+  ownedRooms?: RoomUpdateManyWithoutOwnerInput
+}
+
+export interface RoomUpdateWithWhereUniqueWithoutOwnerInput {
+  where: RoomWhereUniqueInput
+  data: RoomUpdateWithoutOwnerDataInput
+}
+
+export interface RoomUpdateManyWithoutOwnerInput {
+  create?: RoomCreateWithoutOwnerInput[] | RoomCreateWithoutOwnerInput
+  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
+  disconnect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
+  delete?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
+  update?: RoomUpdateWithWhereUniqueWithoutOwnerInput[] | RoomUpdateWithWhereUniqueWithoutOwnerInput
+  upsert?: RoomUpsertWithWhereUniqueWithoutOwnerInput[] | RoomUpsertWithWhereUniqueWithoutOwnerInput
+}
+
+export interface RoomUpsertWithWhereUniqueWithoutMembersInput {
+  where: RoomWhereUniqueInput
+  update: RoomUpdateWithoutMembersDataInput
+  create: RoomCreateWithoutMembersInput
+}
+
 export interface RoomUpdateWithoutMembersDataInput {
   type?: RoomType
   name?: String
   owner?: UserUpdateOneRequiredWithoutOwnedRoomsInput
 }
 
-export interface RoomUpdateWithWhereUniqueWithoutMembersInput {
-  where: RoomWhereUniqueInput
-  data: RoomUpdateWithoutMembersDataInput
+export interface MovieUpdateOneRequiredInput {
+  create?: MovieCreateInput
+  connect?: MovieWhereUniqueInput
+  update?: MovieUpdateDataInput
+  upsert?: MovieUpsertNestedInput
 }
 
-export interface RoomUpdateManyWithoutMembersInput {
-  create?: RoomCreateWithoutMembersInput[] | RoomCreateWithoutMembersInput
-  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
-  disconnect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
-  delete?: RoomWhereUniqueInput[] | RoomWhereUniqueInput
-  update?: RoomUpdateWithWhereUniqueWithoutMembersInput[] | RoomUpdateWithWhereUniqueWithoutMembersInput
-  upsert?: RoomUpsertWithWhereUniqueWithoutMembersInput[] | RoomUpsertWithWhereUniqueWithoutMembersInput
+export interface UserUpsertWithoutMoviesInput {
+  update: UserUpdateWithoutMoviesDataInput
+  create: UserCreateWithoutMoviesInput
 }
 
-export interface MovieRelationUpdateManyInput {
-  create?: MovieRelationCreateInput[] | MovieRelationCreateInput
-}
-
-export interface UserWhereUniqueInput {
-  id?: ID_Input
-  email?: String
-  nickname?: String
+export interface UserCreateOneWithoutMoviesInput {
+  create?: UserCreateWithoutMoviesInput
+  connect?: UserWhereUniqueInput
 }
 
 export interface UserUpdateWithoutRoomsDataInput {
@@ -2153,20 +2257,13 @@ export interface UserUpdateWithoutRoomsDataInput {
   firstName?: String
   lastName?: String
   friends?: UserUpdateManyInput
-  movies?: MovieRelationUpdateManyInput
+  movies?: MovieRelationUpdateManyWithoutUserInput
   ownedRooms?: RoomUpdateManyWithoutOwnerInput
 }
 
 export interface UserUpsertWithoutOwnedRoomsInput {
   update: UserUpdateWithoutOwnedRoomsDataInput
   create: UserCreateWithoutOwnedRoomsInput
-}
-
-export interface MovieUpdateOneRequiredInput {
-  create?: MovieCreateInput
-  connect?: MovieWhereUniqueInput
-  update?: MovieUpdateDataInput
-  upsert?: MovieUpsertNestedInput
 }
 
 /*
@@ -2186,32 +2283,14 @@ export interface MoviePreviousValues {
 }
 
 /*
- * An edge in a connection.
+ * Information about pagination in a connection.
 
  */
-export interface RoomEdge {
-  node: Room
-  cursor: String
-}
-
-export interface Room extends Node {
-  id: ID_Output
-  type: RoomType
-  name: String
-  owner: User
-  members?: User[]
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-export interface AggregateRoom {
-  count: Int
-}
-
-export interface MovieRelation {
-  watched: Boolean
-  watchlisted: Boolean
-  movie: Movie
+export interface PageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor?: String
+  endCursor?: String
 }
 
 export interface User extends Node {
@@ -2229,46 +2308,80 @@ export interface User extends Node {
 }
 
 /*
- * Information about pagination in a connection.
-
- */
-export interface PageInfo {
-  hasNextPage: Boolean
-  hasPreviousPage: Boolean
-  startCursor?: String
-  endCursor?: String
-}
-
-export interface AggregateMovie {
-  count: Int
-}
-
-/*
  * A connection to a list of items.
 
  */
-export interface MovieConnection {
+export interface MovieRelationConnection {
   pageInfo: PageInfo
-  edges: MovieEdge[]
-  aggregate: AggregateMovie
+  edges: MovieRelationEdge[]
+  aggregate: AggregateMovieRelation
 }
 
-/*
- * A connection to a list of items.
+export interface MovieRelation {
+  watched: Boolean
+  watchlisted: Boolean
+  movie: Movie
+  user: User
+}
 
- */
-export interface RoomConnection {
-  pageInfo: PageInfo
-  edges: RoomEdge[]
-  aggregate: AggregateRoom
+export interface MovieSubscriptionPayload {
+  mutation: MutationType
+  node?: Movie
+  updatedFields?: String[]
+  previousValues?: MoviePreviousValues
 }
 
 /*
  * An edge in a connection.
 
  */
-export interface UserEdge {
-  node: User
+export interface MovieEdge {
+  node: Movie
+  cursor: String
+}
+
+export interface BatchPayload {
+  count: Long
+}
+
+export interface AggregateUser {
+  count: Int
+}
+
+export interface Movie extends Node {
+  id: ID_Output
+  tmdbId?: String
+  imdbId?: String
+  traktId?: String
+  createdAt: DateTime
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface UserConnection {
+  pageInfo: PageInfo
+  edges: UserEdge[]
+  aggregate: AggregateUser
+}
+
+export interface Room extends Node {
+  id: ID_Output
+  type: RoomType
+  name: String
+  owner: User
+  members?: User[]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface RoomEdge {
+  node: Room
   cursor: String
 }
 
@@ -2286,46 +2399,6 @@ export interface AggregateMovieRelation {
   count: Int
 }
 
-export interface UserSubscriptionPayload {
-  mutation: MutationType
-  node?: User
-  updatedFields?: String[]
-  previousValues?: UserPreviousValues
-}
-
-/*
- * A connection to a list of items.
-
- */
-export interface MovieRelationConnection {
-  pageInfo: PageInfo
-  edges: MovieRelationEdge[]
-  aggregate: AggregateMovieRelation
-}
-
-export interface RoomSubscriptionPayload {
-  mutation: MutationType
-  node?: Room
-  updatedFields?: String[]
-  previousValues?: RoomPreviousValues
-}
-
-export interface MovieSubscriptionPayload {
-  mutation: MutationType
-  node?: Movie
-  updatedFields?: String[]
-  previousValues?: MoviePreviousValues
-}
-
-export interface AggregateUser {
-  count: Int
-}
-
-export interface MovieRelationPreviousValues {
-  watched: Boolean
-  watchlisted: Boolean
-}
-
 export interface MovieRelationSubscriptionPayload {
   mutation: MutationType
   node?: MovieRelation
@@ -2333,12 +2406,17 @@ export interface MovieRelationSubscriptionPayload {
   previousValues?: MovieRelationPreviousValues
 }
 
-export interface Movie extends Node {
-  id: ID_Output
-  tmdbId?: String
-  imdbId?: String
-  traktId?: String
-  createdAt: DateTime
+export interface AggregateMovie {
+  count: Int
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface UserEdge {
+  node: User
+  cursor: String
 }
 
 export interface RoomPreviousValues {
@@ -2349,27 +2427,37 @@ export interface RoomPreviousValues {
   updatedAt: DateTime
 }
 
+export interface RoomSubscriptionPayload {
+  mutation: MutationType
+  node?: Room
+  updatedFields?: String[]
+  previousValues?: RoomPreviousValues
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType
+  node?: User
+  updatedFields?: String[]
+  previousValues?: UserPreviousValues
+}
+
+export interface MovieRelationPreviousValues {
+  watched: Boolean
+  watchlisted: Boolean
+}
+
+export interface AggregateRoom {
+  count: Int
+}
+
 /*
  * A connection to a list of items.
 
  */
-export interface UserConnection {
+export interface MovieConnection {
   pageInfo: PageInfo
-  edges: UserEdge[]
-  aggregate: AggregateUser
-}
-
-/*
- * An edge in a connection.
-
- */
-export interface MovieEdge {
-  node: Movie
-  cursor: String
-}
-
-export interface BatchPayload {
-  count: Long
+  edges: MovieEdge[]
+  aggregate: AggregateMovie
 }
 
 /*
@@ -2382,9 +2470,14 @@ export interface MovieRelationEdge {
 }
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number
+ * A connection to a list of items.
+
+ */
+export interface RoomConnection {
+  pageInfo: PageInfo
+  edges: RoomEdge[]
+  aggregate: AggregateRoom
+}
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -2393,19 +2486,24 @@ export type ID_Input = string | number
 export type ID_Output = string
 
 /*
-The `Long` scalar type represents non-fractional signed whole numeric values.
-Long can represent values between -(2^63) and 2^63 - 1.
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
-export type Long = string
+export type Int = number
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean
 
-export type DateTime = Date | string
+/*
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+*/
+export type Long = string
 
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string
+
+export type DateTime = Date | string
