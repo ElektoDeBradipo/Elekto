@@ -5,18 +5,30 @@ type User {
   nickname: String! @unique
   firstName: String
   lastName: String
-  friends: [User!]! @relation(name: "Friends")
-  createdAt: DateTime!
-  movies: [MovieRelation!]! @relation(name: "UserMovies", onDelete: CASCADE)
+  friendRequestsEmitted: [FriendRequest!]!
+    @relation(name: "FriendRequestEmitter", onDelete: CASCADE)
+  friendRequestsReceived: [FriendRequest!]!
+    @relation(name: "FriendRequestReceiver", onDelete: CASCADE)
+  movieLinks: [MovieLink!]!
+    @relation(name: "UserToMovieLink", onDelete: CASCADE)
   rooms: [Room!]! @relation(name: "RoomMembership")
   ownedRooms: [Room!]! @relation(name: "RoomOwner", onDelete: CASCADE)
+  createdAt: DateTime!
 }
 
-type MovieRelation {
-  watched: Boolean!
-  watchlisted: Boolean!
-  movie: Movie!
-  user: User! @relation(name: "UserMovies")
+type FriendRequest {
+  id: ID! @unique
+  source: User! @relation(name: "FriendRequestEmitter")
+  target: User! @relation(name: "FriendRequestReceiver")
+  status: FriendRequestStatus! @default(value: PENDING)
+  createdAt: DateTime!
+}
+
+type MovieLink {
+  watched: Boolean! @default(value: false)
+  watchlisted: Boolean! @default(value: false)
+  movie: Movie! @relation(name: "MovieToMovieLink")
+  user: User! @relation(name: "UserToMovieLink")
 }
 
 type Movie {
@@ -24,6 +36,8 @@ type Movie {
   tmdbId: String @unique
   imdbId: String @unique
   traktId: String @unique
+  movieLinks: [MovieLink!]!
+    @relation(name: "MovieToMovieLink", onDelete: CASCADE)
   createdAt: DateTime!
 }
 
@@ -39,4 +53,10 @@ type Room {
 
 enum RoomType {
   MOVIE
+}
+
+enum FriendRequestStatus {
+  PENDING
+  APPROUVED
+  BLOCKED
 }

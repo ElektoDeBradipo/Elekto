@@ -6,18 +6,13 @@ import {
   ResolveProperty,
   Resolver,
 } from '@nestjs/graphql';
+import { User as UserInterface, UserMovie, UserRoom } from '../app.interface';
 import { GqlAuthGuard } from '../auth/gql-auth.guard';
-import { IMovie } from '../movie/movie.interface';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProviderService } from '../provider/provider.service';
 import { User } from './user.decorator';
 
-const getMoviesIds = where => `{ 
-  movies(where: { ${where} }) { 
-    movie { id, traktId, tmdbId, imdbId } 
-  }
-}`;
-
+@Resolver('Friend')
 @Resolver('User')
 export class UserResolver {
   constructor(
@@ -27,45 +22,51 @@ export class UserResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query()
-  async user(@Args('id') id: string): Promise<any> {
-    return await this.prisma.query.user({ where: { id } });
+  async user(@Args('id') id: string): Promise<Partial<UserInterface>> {
+    return await this.prisma.r.user({ id });
   }
 
   @UseGuards(GqlAuthGuard)
   @Query()
-  async me(@User() user) {
-    return await this.prisma.query.user({ where: { id: user.id } });
+  async me(@User() user): Promise<Partial<UserInterface>> {
+    return await this.prisma.r.user({ id: user.id });
   }
 
   @ResolveProperty()
-  async moviesWatched(@Parent() user): Promise<IMovie[]> {
-    const { id } = user;
-    const userMovies = await this.prisma.query.user(
-      { where: { id } },
-      getMoviesIds('watched: true'),
-    );
-    const moviesIds = userMovies.movies.map(m => m.movie);
-    return Promise.all(
-      moviesIds.map(async ids => {
-        const movie = await this.provider.getMovie(ids);
-        return { id: ids.id, ...movie };
-      }),
-    );
+  async movies(
+    @Parent() { id },
+    @Args('watchlisted') watchlisted: boolean,
+    @Args('watched') watched: boolean,
+  ): Promise<UserMovie[]> {
+    const movies = await this.prisma.r.movies({
+      where: { movieLinks_some: { user: { id }, watched, watchlisted } },
+    });
+    const resultPromises = movies.map(async movie => {
+      const movieMetaPromise = this.provider.getMovie(movie);
+      const movieStatusPromise = this.prisma.r.movieLinks({
+        where: { user: { id }, movie: { id: movie.id } },
+      });
+      return {
+        ...(await movieMetaPromise),
+        ...(await movieStatusPromise)[0],
+      };
+    });
+    return Promise.all(resultPromises);
   }
 
   @ResolveProperty()
-  async moviesWatchlisted(@Parent() user): Promise<IMovie[]> {
-    const { id } = user;
-    const userMovies = await this.prisma.query.user(
-      { where: { id } },
-      getMoviesIds('watchlisted: true'),
-    );
-    const moviesIds = userMovies.movies.map(m => m.movie);
-    return Promise.all(
-      moviesIds.map(async ids => {
-        const movie = await this.provider.getMovie(ids);
-        return { id: ids.id, ...movie };
-      }),
-    );
+  async rooms(@Parent() { id }): Promise<Partial<UserRoom>[]> {
+    const rooms = await this.prisma.r.rooms({
+      where: { OR: [{ members_some: { id } }, { owner: { id } }] },
+    });
+    const resultPromises = rooms.map(async room => {
+      const owned = Boolean(
+        (await this.prisma.r
+          .user({ id })
+          .ownedRooms({ where: { id: room.id } })).length,
+      );
+      return { owned, ...room };
+    });
+    return Promise.all(resultPromises);
   }
 }

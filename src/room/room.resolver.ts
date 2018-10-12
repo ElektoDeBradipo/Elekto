@@ -6,13 +6,15 @@ import {
   ResolveProperty,
   Resolver,
 } from '@nestjs/graphql';
+import { UserNode } from 'prisma/prisma.binding';
+import { Movie, MovieModeInput, Room } from '../app.interface';
 import { ConfigService } from '../config/config.service';
-import { IMovie, IMovieFull, IMoviePartial } from '../movie/movie.interface';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProviderService } from '../provider/provider.service';
-import { MovieDataMap, ResultMode } from './room.interface';
+import { MovieDataMap } from './room.interface';
 import { RoomService } from './room.service';
 
+@Resolver('UserRoom')
 @Resolver('Room')
 export class RoomResolver {
   private defaultResultNumber: number;
@@ -26,20 +28,20 @@ export class RoomResolver {
   }
 
   @Query()
-  async room(@Args('id') id: string, @Info() info): Promise<IMoviePartial> {
-    return await this.prisma.query.room({ where: { id } }, info);
+  async room(@Args('id') id: string, @Info() info): Promise<Partial<Room>> {
+    return await this.prisma.r.room({ id });
   }
 
-  @ResolveProperty()
-  async movies(@Parent() { id }, @Args('mode') mode): Promise<IMovie[]> {
+  @ResolveProperty('movies')
+  async movies(@Parent() { id }, @Args('mode') mode): Promise<Movie[]> {
     const moviesData: MovieDataMap = await this.service.getMoviesDataMap(id);
-    let movies: IMovieFull[] = [];
+    let movies: Movie[] = [];
 
     switch (mode) {
-      case ResultMode.WATCHLISTED:
+      case MovieModeInput.WATCHLISTED:
         movies = await this.service.getWatchlistedMovies(moviesData);
         break;
-      case ResultMode.TRENDING:
+      case MovieModeInput.TRENDING:
         movies = await this.service.getTrendingMovies(moviesData);
         break;
       default:
@@ -47,12 +49,17 @@ export class RoomResolver {
     }
 
     return movies.sort((m1, m2) => {
-      if (mode == ResultMode.WATCHLISTED) {
+      if (mode == MovieModeInput.WATCHLISTED) {
         const m1D = moviesData.get(m1.id);
         const m2D = moviesData.get(m2.id);
         return m2D.watchlisted.length - m1D.watchlisted.length;
       }
       return 0;
     });
+  }
+
+  @ResolveProperty()
+  async members(@Parent() { id }): Promise<UserNode[]> {
+    return await this.prisma.r.users({ where: { rooms_some: { id } } });
   }
 }

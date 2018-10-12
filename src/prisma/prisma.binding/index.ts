@@ -2,17 +2,18 @@
 // Please don't change this file manually but run `prisma generate` to update it.
 // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-import { DocumentNode, GraphQLSchema } from "graphql";
-import { IResolvers } from "graphql-tools/dist/Interfaces";
-import { makePrismaClientClass, BaseClientOptions } from "prisma-client-lib";
-import { typeDefs } from "./prisma-schema";
+import { DocumentNode, GraphQLSchema } from 'graphql';
+import { IResolvers } from 'graphql-tools/dist/Interfaces';
+import { makePrismaClientClass, BaseClientOptions } from 'prisma-client-lib';
+import { typeDefs } from './prisma-schema';
 
 type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
 
 export interface Exists {
+  friendRequest: (where?: FriendRequestWhereInput) => Promise<boolean>;
   movie: (where?: MovieWhereInput) => Promise<boolean>;
-  movieRelation: (where?: MovieRelationWhereInput) => Promise<boolean>;
+  movieLink: (where?: MovieLinkWhereInput) => Promise<boolean>;
   room: (where?: RoomWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
@@ -29,7 +30,7 @@ export interface Prisma {
   $exists: Exists;
   $graphql: <T = any>(
     query: string,
-    variables?: { [key: string]: any }
+    variables?: { [key: string]: any },
   ) => Promise<T>;
   $getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers;
 
@@ -37,6 +38,29 @@ export interface Prisma {
    * Queries
    */
 
+  friendRequest: (where: FriendRequestWhereUniqueInput) => FriendRequest;
+  friendRequests: (
+    args?: {
+      where?: FriendRequestWhereInput;
+      orderBy?: FriendRequestOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => FragmentableArray<FriendRequestNode>;
+  friendRequestsConnection: (
+    args?: {
+      where?: FriendRequestWhereInput;
+      orderBy?: FriendRequestOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => FriendRequestConnection;
   movie: (where: MovieWhereUniqueInput) => Movie;
   movies: (
     args?: {
@@ -47,7 +71,7 @@ export interface Prisma {
       before?: String;
       first?: Int;
       last?: Int;
-    }
+    },
   ) => FragmentableArray<MovieNode>;
   moviesConnection: (
     args?: {
@@ -58,30 +82,30 @@ export interface Prisma {
       before?: String;
       first?: Int;
       last?: Int;
-    }
+    },
   ) => MovieConnection;
-  movieRelations: (
+  movieLinks: (
     args?: {
-      where?: MovieRelationWhereInput;
-      orderBy?: MovieRelationOrderByInput;
+      where?: MovieLinkWhereInput;
+      orderBy?: MovieLinkOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
       first?: Int;
       last?: Int;
-    }
-  ) => FragmentableArray<MovieRelationNode>;
-  movieRelationsConnection: (
+    },
+  ) => FragmentableArray<MovieLinkNode>;
+  movieLinksConnection: (
     args?: {
-      where?: MovieRelationWhereInput;
-      orderBy?: MovieRelationOrderByInput;
+      where?: MovieLinkWhereInput;
+      orderBy?: MovieLinkOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
       first?: Int;
       last?: Int;
-    }
-  ) => MovieRelationConnection;
+    },
+  ) => MovieLinkConnection;
   room: (where: RoomWhereUniqueInput) => Room;
   rooms: (
     args?: {
@@ -92,7 +116,7 @@ export interface Prisma {
       before?: String;
       first?: Int;
       last?: Int;
-    }
+    },
   ) => FragmentableArray<RoomNode>;
   roomsConnection: (
     args?: {
@@ -103,7 +127,7 @@ export interface Prisma {
       before?: String;
       first?: Int;
       last?: Int;
-    }
+    },
   ) => RoomConnection;
   user: (where: UserWhereUniqueInput) => User;
   users: (
@@ -115,7 +139,7 @@ export interface Prisma {
       before?: String;
       first?: Int;
       last?: Int;
-    }
+    },
   ) => FragmentableArray<UserNode>;
   usersConnection: (
     args?: {
@@ -126,7 +150,7 @@ export interface Prisma {
       before?: String;
       first?: Int;
       last?: Int;
-    }
+    },
   ) => UserConnection;
   node: (args: { id: ID_Output }) => Node;
 
@@ -134,56 +158,75 @@ export interface Prisma {
    * Mutations
    */
 
+  createFriendRequest: (data: FriendRequestCreateInput) => FriendRequest;
+  updateFriendRequest: (
+    args: {
+      data: FriendRequestUpdateInput;
+      where: FriendRequestWhereUniqueInput;
+    },
+  ) => FriendRequest;
+  updateManyFriendRequests: (
+    args: { data: FriendRequestUpdateInput; where?: FriendRequestWhereInput },
+  ) => BatchPayload;
+  upsertFriendRequest: (
+    args: {
+      where: FriendRequestWhereUniqueInput;
+      create: FriendRequestCreateInput;
+      update: FriendRequestUpdateInput;
+    },
+  ) => FriendRequest;
+  deleteFriendRequest: (where: FriendRequestWhereUniqueInput) => FriendRequest;
+  deleteManyFriendRequests: (where?: FriendRequestWhereInput) => BatchPayload;
   createMovie: (data: MovieCreateInput) => Movie;
   updateMovie: (
-    args: { data: MovieUpdateInput; where: MovieWhereUniqueInput }
+    args: { data: MovieUpdateInput; where: MovieWhereUniqueInput },
   ) => Movie;
   updateManyMovies: (
-    args: { data: MovieUpdateInput; where?: MovieWhereInput }
+    args: { data: MovieUpdateInput; where?: MovieWhereInput },
   ) => BatchPayload;
   upsertMovie: (
     args: {
       where: MovieWhereUniqueInput;
       create: MovieCreateInput;
       update: MovieUpdateInput;
-    }
+    },
   ) => Movie;
   deleteMovie: (where: MovieWhereUniqueInput) => Movie;
   deleteManyMovies: (where?: MovieWhereInput) => BatchPayload;
-  createMovieRelation: (data: MovieRelationCreateInput) => MovieRelation;
-  updateManyMovieRelations: (
-    args: { data: MovieRelationUpdateInput; where?: MovieRelationWhereInput }
+  createMovieLink: (data: MovieLinkCreateInput) => MovieLink;
+  updateManyMovieLinks: (
+    args: { data: MovieLinkUpdateInput; where?: MovieLinkWhereInput },
   ) => BatchPayload;
-  deleteManyMovieRelations: (where?: MovieRelationWhereInput) => BatchPayload;
+  deleteManyMovieLinks: (where?: MovieLinkWhereInput) => BatchPayload;
   createRoom: (data: RoomCreateInput) => Room;
   updateRoom: (
-    args: { data: RoomUpdateInput; where: RoomWhereUniqueInput }
+    args: { data: RoomUpdateInput; where: RoomWhereUniqueInput },
   ) => Room;
   updateManyRooms: (
-    args: { data: RoomUpdateInput; where?: RoomWhereInput }
+    args: { data: RoomUpdateInput; where?: RoomWhereInput },
   ) => BatchPayload;
   upsertRoom: (
     args: {
       where: RoomWhereUniqueInput;
       create: RoomCreateInput;
       update: RoomUpdateInput;
-    }
+    },
   ) => Room;
   deleteRoom: (where: RoomWhereUniqueInput) => Room;
   deleteManyRooms: (where?: RoomWhereInput) => BatchPayload;
   createUser: (data: UserCreateInput) => User;
   updateUser: (
-    args: { data: UserUpdateInput; where: UserWhereUniqueInput }
+    args: { data: UserUpdateInput; where: UserWhereUniqueInput },
   ) => User;
   updateManyUsers: (
-    args: { data: UserUpdateInput; where?: UserWhereInput }
+    args: { data: UserUpdateInput; where?: UserWhereInput },
   ) => BatchPayload;
   upsertUser: (
     args: {
       where: UserWhereUniqueInput;
       create: UserCreateInput;
       update: UserUpdateInput;
-    }
+    },
   ) => User;
   deleteUser: (where: UserWhereUniqueInput) => User;
   deleteManyUsers: (where?: UserWhereInput) => BatchPayload;
@@ -196,17 +239,20 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  friendRequest: (
+    where?: FriendRequestSubscriptionWhereInput,
+  ) => FriendRequestSubscriptionPayloadSubscription;
   movie: (
-    where?: MovieSubscriptionWhereInput
+    where?: MovieSubscriptionWhereInput,
   ) => MovieSubscriptionPayloadSubscription;
-  movieRelation: (
-    where?: MovieRelationSubscriptionWhereInput
-  ) => MovieRelationSubscriptionPayloadSubscription;
+  movieLink: (
+    where?: MovieLinkSubscriptionWhereInput,
+  ) => MovieLinkSubscriptionPayloadSubscription;
   room: (
-    where?: RoomSubscriptionWhereInput
+    where?: RoomSubscriptionWhereInput,
   ) => RoomSubscriptionPayloadSubscription;
   user: (
-    where?: UserSubscriptionWhereInput
+    where?: UserSubscriptionWhereInput,
   ) => UserSubscriptionPayloadSubscription;
 }
 
@@ -218,104 +264,142 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type RoomType = "MOVIE";
+export type RoomType = 'MOVIE';
 
-export type MovieOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "tmdbId_ASC"
-  | "tmdbId_DESC"
-  | "imdbId_ASC"
-  | "imdbId_DESC"
-  | "traktId_ASC"
-  | "traktId_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+export type FriendRequestStatus = 'PENDING' | 'APPROUVED' | 'BLOCKED';
 
-export type MovieRelationOrderByInput =
-  | "watched_ASC"
-  | "watched_DESC"
-  | "watchlisted_ASC"
-  | "watchlisted_DESC"
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+export type FriendRequestOrderByInput =
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'status_ASC'
+  | 'status_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC';
 
-export type UserOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "password_ASC"
-  | "password_DESC"
-  | "nickname_ASC"
-  | "nickname_DESC"
-  | "firstName_ASC"
-  | "firstName_DESC"
-  | "lastName_ASC"
-  | "lastName_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+export type MovieLinkOrderByInput =
+  | 'watched_ASC'
+  | 'watched_DESC'
+  | 'watchlisted_ASC'
+  | 'watchlisted_DESC'
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC';
 
 export type RoomOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "type_ASC"
-  | "type_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'type_ASC'
+  | 'type_DESC'
+  | 'name_ASC'
+  | 'name_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC';
 
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+export type UserOrderByInput =
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'email_ASC'
+  | 'email_DESC'
+  | 'password_ASC'
+  | 'password_DESC'
+  | 'nickname_ASC'
+  | 'nickname_DESC'
+  | 'firstName_ASC'
+  | 'firstName_DESC'
+  | 'lastName_ASC'
+  | 'lastName_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC';
+
+export type MovieOrderByInput =
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'tmdbId_ASC'
+  | 'tmdbId_DESC'
+  | 'imdbId_ASC'
+  | 'imdbId_DESC'
+  | 'traktId_ASC'
+  | 'traktId_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC';
+
+export type MutationType = 'CREATED' | 'UPDATED' | 'DELETED';
+
+export interface UserUpdateWithoutFriendRequestsEmittedDataInput {
+  email?: String;
+  password?: String;
+  nickname?: String;
+  firstName?: String;
+  lastName?: String;
+  friendRequestsReceived?: FriendRequestUpdateManyWithoutTargetInput;
+  movieLinks?: MovieLinkUpdateManyWithoutUserInput;
+  rooms?: RoomUpdateManyWithoutMembersInput;
+  ownedRooms?: RoomUpdateManyWithoutOwnerInput;
+}
+
+export type FriendRequestWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface RoomCreateWithoutMembersInput {
+  type: RoomType;
+  name: String;
+  owner: UserCreateOneWithoutOwnedRoomsInput;
+}
+
+export interface UserUpsertWithoutFriendRequestsEmittedInput {
+  update: UserUpdateWithoutFriendRequestsEmittedDataInput;
+  create: UserCreateWithoutFriendRequestsEmittedInput;
+}
 
 export interface UserCreateOneWithoutOwnedRoomsInput {
   create?: UserCreateWithoutOwnedRoomsInput;
   connect?: UserWhereUniqueInput;
 }
 
-export type MovieWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  tmdbId?: String;
-  imdbId?: String;
-  traktId?: String;
-}>;
-
-export interface UserUpsertWithoutOwnedRoomsInput {
-  update: UserUpdateWithoutOwnedRoomsDataInput;
-  create: UserCreateWithoutOwnedRoomsInput;
+export interface MovieLinkUpdateManyWithoutUserInput {
+  create?: MovieLinkCreateWithoutUserInput[] | MovieLinkCreateWithoutUserInput;
 }
 
-export interface RoomUpdateWithoutMembersDataInput {
-  type?: RoomType;
-  name?: String;
-  owner?: UserUpdateOneRequiredWithoutOwnedRoomsInput;
+export interface UserCreateWithoutOwnedRoomsInput {
+  email: String;
+  password: String;
+  nickname: String;
+  firstName?: String;
+  lastName?: String;
+  friendRequestsEmitted?: FriendRequestCreateManyWithoutSourceInput;
+  friendRequestsReceived?: FriendRequestCreateManyWithoutTargetInput;
+  movieLinks?: MovieLinkCreateManyWithoutUserInput;
+  rooms?: RoomCreateManyWithoutMembersInput;
 }
 
-export interface MovieRelationCreateInput {
-  watched: Boolean;
-  watchlisted: Boolean;
-  movie: MovieCreateOneInput;
-  user: UserCreateOneWithoutMoviesInput;
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
-export interface UserCreateManyWithoutRoomsInput {
-  create?: UserCreateWithoutRoomsInput[] | UserCreateWithoutRoomsInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface MovieCreateOneInput {
-  create?: MovieCreateInput;
-  connect?: MovieWhereUniqueInput;
+export interface FriendRequestCreateManyWithoutSourceInput {
+  create?:
+    | FriendRequestCreateWithoutSourceInput[]
+    | FriendRequestCreateWithoutSourceInput;
+  connect?: FriendRequestWhereUniqueInput[] | FriendRequestWhereUniqueInput;
 }
 
 export interface RoomSubscriptionWhereInput {
@@ -329,32 +413,241 @@ export interface RoomSubscriptionWhereInput {
   NOT?: RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput;
 }
 
-export interface UserCreateOneWithoutMoviesInput {
-  create?: UserCreateWithoutMoviesInput;
+export interface FriendRequestCreateWithoutSourceInput {
+  target: UserCreateOneWithoutFriendRequestsReceivedInput;
+  status?: FriendRequestStatus;
+}
+
+export interface MovieLinkSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: MovieLinkWhereInput;
+  AND?: MovieLinkSubscriptionWhereInput[] | MovieLinkSubscriptionWhereInput;
+  OR?: MovieLinkSubscriptionWhereInput[] | MovieLinkSubscriptionWhereInput;
+  NOT?: MovieLinkSubscriptionWhereInput[] | MovieLinkSubscriptionWhereInput;
+}
+
+export interface UserCreateOneWithoutFriendRequestsReceivedInput {
+  create?: UserCreateWithoutFriendRequestsReceivedInput;
   connect?: UserWhereUniqueInput;
 }
 
-export interface MovieRelationWhereInput {
-  watched?: Boolean;
-  watched_not?: Boolean;
-  watchlisted?: Boolean;
-  watchlisted_not?: Boolean;
-  movie?: MovieWhereInput;
-  user?: UserWhereInput;
-  AND?: MovieRelationWhereInput[] | MovieRelationWhereInput;
-  OR?: MovieRelationWhereInput[] | MovieRelationWhereInput;
-  NOT?: MovieRelationWhereInput[] | MovieRelationWhereInput;
+export interface FriendRequestWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  source?: UserWhereInput;
+  target?: UserWhereInput;
+  status?: FriendRequestStatus;
+  status_not?: FriendRequestStatus;
+  status_in?: FriendRequestStatus[] | FriendRequestStatus;
+  status_not_in?: FriendRequestStatus[] | FriendRequestStatus;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: FriendRequestWhereInput[] | FriendRequestWhereInput;
+  OR?: FriendRequestWhereInput[] | FriendRequestWhereInput;
+  NOT?: FriendRequestWhereInput[] | FriendRequestWhereInput;
 }
 
-export interface UserCreateWithoutMoviesInput {
+export interface UserCreateWithoutFriendRequestsReceivedInput {
   email: String;
   password: String;
   nickname: String;
   firstName?: String;
   lastName?: String;
-  friends?: UserCreateManyWithoutFriendsInput;
+  friendRequestsEmitted?: FriendRequestCreateManyWithoutSourceInput;
+  movieLinks?: MovieLinkCreateManyWithoutUserInput;
   rooms?: RoomCreateManyWithoutMembersInput;
   ownedRooms?: RoomCreateManyWithoutOwnerInput;
+}
+
+export interface UserUpdateInput {
+  email?: String;
+  password?: String;
+  nickname?: String;
+  firstName?: String;
+  lastName?: String;
+  friendRequestsEmitted?: FriendRequestUpdateManyWithoutSourceInput;
+  friendRequestsReceived?: FriendRequestUpdateManyWithoutTargetInput;
+  movieLinks?: MovieLinkUpdateManyWithoutUserInput;
+  rooms?: RoomUpdateManyWithoutMembersInput;
+  ownedRooms?: RoomUpdateManyWithoutOwnerInput;
+}
+
+export interface RoomCreateManyWithoutOwnerInput {
+  create?: RoomCreateWithoutOwnerInput[] | RoomCreateWithoutOwnerInput;
+  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
+}
+
+export interface RoomUpdateInput {
+  type?: RoomType;
+  name?: String;
+  owner?: UserUpdateOneRequiredWithoutOwnedRoomsInput;
+  members?: UserUpdateManyWithoutRoomsInput;
+}
+
+export interface RoomCreateWithoutOwnerInput {
+  type: RoomType;
+  name: String;
+  members?: UserCreateManyWithoutRoomsInput;
+}
+
+export interface UserUpsertWithoutMovieLinksInput {
+  update: UserUpdateWithoutMovieLinksDataInput;
+  create: UserCreateWithoutMovieLinksInput;
+}
+
+export interface UserCreateManyWithoutRoomsInput {
+  create?: UserCreateWithoutRoomsInput[] | UserCreateWithoutRoomsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutMovieLinksDataInput {
+  email?: String;
+  password?: String;
+  nickname?: String;
+  firstName?: String;
+  lastName?: String;
+  friendRequestsEmitted?: FriendRequestUpdateManyWithoutSourceInput;
+  friendRequestsReceived?: FriendRequestUpdateManyWithoutTargetInput;
+  rooms?: RoomUpdateManyWithoutMembersInput;
+  ownedRooms?: RoomUpdateManyWithoutOwnerInput;
+}
+
+export interface UserCreateWithoutRoomsInput {
+  email: String;
+  password: String;
+  nickname: String;
+  firstName?: String;
+  lastName?: String;
+  friendRequestsEmitted?: FriendRequestCreateManyWithoutSourceInput;
+  friendRequestsReceived?: FriendRequestCreateManyWithoutTargetInput;
+  movieLinks?: MovieLinkCreateManyWithoutUserInput;
+  ownedRooms?: RoomCreateManyWithoutOwnerInput;
+}
+
+export interface MovieUpsertWithoutMovieLinksInput {
+  update: MovieUpdateWithoutMovieLinksDataInput;
+  create: MovieCreateWithoutMovieLinksInput;
+}
+
+export interface FriendRequestUpdateInput {
+  source?: UserUpdateOneRequiredWithoutFriendRequestsEmittedInput;
+  target?: UserUpdateOneRequiredWithoutFriendRequestsReceivedInput;
+  status?: FriendRequestStatus;
+}
+
+export interface MovieUpdateOneRequiredWithoutMovieLinksInput {
+  create?: MovieCreateWithoutMovieLinksInput;
+  update?: MovieUpdateWithoutMovieLinksDataInput;
+  upsert?: MovieUpsertWithoutMovieLinksInput;
+  connect?: MovieWhereUniqueInput;
+}
+
+export interface UserUpdateOneRequiredWithoutFriendRequestsEmittedInput {
+  create?: UserCreateWithoutFriendRequestsEmittedInput;
+  update?: UserUpdateWithoutFriendRequestsEmittedDataInput;
+  upsert?: UserUpsertWithoutFriendRequestsEmittedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface MovieLinkCreateInput {
+  watched?: Boolean;
+  watchlisted?: Boolean;
+  movie: MovieCreateOneWithoutMovieLinksInput;
+  user: UserCreateOneWithoutMovieLinksInput;
+}
+
+export interface MovieCreateInput {
+  tmdbId?: String;
+  imdbId?: String;
+  traktId?: String;
+  movieLinks?: MovieLinkCreateManyWithoutMovieInput;
+}
+
+export interface MovieLinkUpdateManyWithoutMovieInput {
+  create?:
+    | MovieLinkCreateWithoutMovieInput[]
+    | MovieLinkCreateWithoutMovieInput;
+}
+
+export interface FriendRequestUpdateManyWithoutTargetInput {
+  create?:
+    | FriendRequestCreateWithoutTargetInput[]
+    | FriendRequestCreateWithoutTargetInput;
+  delete?: FriendRequestWhereUniqueInput[] | FriendRequestWhereUniqueInput;
+  connect?: FriendRequestWhereUniqueInput[] | FriendRequestWhereUniqueInput;
+  disconnect?: FriendRequestWhereUniqueInput[] | FriendRequestWhereUniqueInput;
+  update?:
+    | FriendRequestUpdateWithWhereUniqueWithoutTargetInput[]
+    | FriendRequestUpdateWithWhereUniqueWithoutTargetInput;
+  upsert?:
+    | FriendRequestUpsertWithWhereUniqueWithoutTargetInput[]
+    | FriendRequestUpsertWithWhereUniqueWithoutTargetInput;
+}
+
+export interface UserCreateWithoutMovieLinksInput {
+  email: String;
+  password: String;
+  nickname: String;
+  firstName?: String;
+  lastName?: String;
+  friendRequestsEmitted?: FriendRequestCreateManyWithoutSourceInput;
+  friendRequestsReceived?: FriendRequestCreateManyWithoutTargetInput;
+  rooms?: RoomCreateManyWithoutMembersInput;
+  ownedRooms?: RoomCreateManyWithoutOwnerInput;
+}
+
+export interface FriendRequestUpdateWithWhereUniqueWithoutTargetInput {
+  where: FriendRequestWhereUniqueInput;
+  data: FriendRequestUpdateWithoutTargetDataInput;
+}
+
+export interface UserCreateOneWithoutMovieLinksInput {
+  create?: UserCreateWithoutMovieLinksInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface FriendRequestUpdateWithoutTargetDataInput {
+  source?: UserUpdateOneRequiredWithoutFriendRequestsEmittedInput;
+  status?: FriendRequestStatus;
+}
+
+export interface MovieLinkCreateManyWithoutMovieInput {
+  create?:
+    | MovieLinkCreateWithoutMovieInput[]
+    | MovieLinkCreateWithoutMovieInput;
+}
+
+export interface FriendRequestUpsertWithWhereUniqueWithoutTargetInput {
+  where: FriendRequestWhereUniqueInput;
+  update: FriendRequestUpdateWithoutTargetDataInput;
+  create: FriendRequestCreateWithoutTargetInput;
+}
+
+export interface FriendRequestCreateInput {
+  source: UserCreateOneWithoutFriendRequestsEmittedInput;
+  target: UserCreateOneWithoutFriendRequestsReceivedInput;
+  status?: FriendRequestStatus;
 }
 
 export interface RoomWhereInput {
@@ -415,9 +708,64 @@ export interface RoomWhereInput {
   NOT?: RoomWhereInput[] | RoomWhereInput;
 }
 
-export interface UserCreateManyWithoutFriendsInput {
-  create?: UserCreateWithoutFriendsInput[] | UserCreateWithoutFriendsInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+export interface UserCreateWithoutFriendRequestsEmittedInput {
+  email: String;
+  password: String;
+  nickname: String;
+  firstName?: String;
+  lastName?: String;
+  friendRequestsReceived?: FriendRequestCreateManyWithoutTargetInput;
+  movieLinks?: MovieLinkCreateManyWithoutUserInput;
+  rooms?: RoomCreateManyWithoutMembersInput;
+  ownedRooms?: RoomCreateManyWithoutOwnerInput;
+}
+
+export interface RoomUpdateManyWithoutMembersInput {
+  create?: RoomCreateWithoutMembersInput[] | RoomCreateWithoutMembersInput;
+  delete?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
+  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
+  disconnect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
+  update?:
+    | RoomUpdateWithWhereUniqueWithoutMembersInput[]
+    | RoomUpdateWithWhereUniqueWithoutMembersInput;
+  upsert?:
+    | RoomUpsertWithWhereUniqueWithoutMembersInput[]
+    | RoomUpsertWithWhereUniqueWithoutMembersInput;
+}
+
+export interface FriendRequestCreateWithoutTargetInput {
+  source: UserCreateOneWithoutFriendRequestsEmittedInput;
+  status?: FriendRequestStatus;
+}
+
+export interface RoomUpdateWithWhereUniqueWithoutMembersInput {
+  where: RoomWhereUniqueInput;
+  data: RoomUpdateWithoutMembersDataInput;
+}
+
+export interface MovieLinkCreateWithoutUserInput {
+  watched?: Boolean;
+  watchlisted?: Boolean;
+  movie: MovieCreateOneWithoutMovieLinksInput;
+}
+
+export interface RoomUpdateWithoutMembersDataInput {
+  type?: RoomType;
+  name?: String;
+  owner?: UserUpdateOneRequiredWithoutOwnedRoomsInput;
+}
+
+export interface MovieCreateWithoutMovieLinksInput {
+  tmdbId?: String;
+  imdbId?: String;
+  traktId?: String;
+}
+
+export interface UserUpdateOneRequiredWithoutOwnedRoomsInput {
+  create?: UserCreateWithoutOwnedRoomsInput;
+  update?: UserUpdateWithoutOwnedRoomsDataInput;
+  upsert?: UserUpsertWithoutOwnedRoomsInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface MovieWhereInput {
@@ -477,6 +825,9 @@ export interface MovieWhereInput {
   traktId_not_starts_with?: String;
   traktId_ends_with?: String;
   traktId_not_ends_with?: String;
+  movieLinks_every?: MovieLinkWhereInput;
+  movieLinks_some?: MovieLinkWhereInput;
+  movieLinks_none?: MovieLinkWhereInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -490,288 +841,16 @@ export interface MovieWhereInput {
   NOT?: MovieWhereInput[] | MovieWhereInput;
 }
 
-export interface UserCreateWithoutFriendsInput {
-  email: String;
-  password: String;
-  nickname: String;
-  firstName?: String;
-  lastName?: String;
-  movies?: MovieRelationCreateManyWithoutUserInput;
-  rooms?: RoomCreateManyWithoutMembersInput;
-  ownedRooms?: RoomCreateManyWithoutOwnerInput;
-}
-
-export interface UserCreateInput {
-  email: String;
-  password: String;
-  nickname: String;
-  firstName?: String;
-  lastName?: String;
-  friends?: UserCreateManyWithoutFriendsInput;
-  movies?: MovieRelationCreateManyWithoutUserInput;
-  rooms?: RoomCreateManyWithoutMembersInput;
-  ownedRooms?: RoomCreateManyWithoutOwnerInput;
-}
-
-export interface MovieRelationCreateManyWithoutUserInput {
-  create?:
-    | MovieRelationCreateWithoutUserInput[]
-    | MovieRelationCreateWithoutUserInput;
-}
-
-export interface RoomCreateInput {
-  type: RoomType;
-  name: String;
-  owner: UserCreateOneWithoutOwnedRoomsInput;
-  members?: UserCreateManyWithoutRoomsInput;
-}
-
-export interface MovieRelationCreateWithoutUserInput {
-  watched: Boolean;
-  watchlisted: Boolean;
-  movie: MovieCreateOneInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutFriendsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutFriendsDataInput;
-  create: UserCreateWithoutFriendsInput;
-}
-
-export interface RoomCreateManyWithoutMembersInput {
-  create?: RoomCreateWithoutMembersInput[] | RoomCreateWithoutMembersInput;
-  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutRoomsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutRoomsDataInput;
-  create: UserCreateWithoutRoomsInput;
-}
-
-export interface RoomCreateWithoutMembersInput {
-  type: RoomType;
-  name: String;
-  owner: UserCreateOneWithoutOwnedRoomsInput;
-}
-
-export interface UserUpdateWithoutRoomsDataInput {
-  email?: String;
-  password?: String;
-  nickname?: String;
-  firstName?: String;
-  lastName?: String;
-  friends?: UserUpdateManyWithoutFriendsInput;
-  movies?: MovieRelationUpdateManyWithoutUserInput;
-  ownedRooms?: RoomUpdateManyWithoutOwnerInput;
-}
-
 export interface UserUpdateWithoutOwnedRoomsDataInput {
   email?: String;
   password?: String;
   nickname?: String;
   firstName?: String;
   lastName?: String;
-  friends?: UserUpdateManyWithoutFriendsInput;
-  movies?: MovieRelationUpdateManyWithoutUserInput;
+  friendRequestsEmitted?: FriendRequestUpdateManyWithoutSourceInput;
+  friendRequestsReceived?: FriendRequestUpdateManyWithoutTargetInput;
+  movieLinks?: MovieLinkUpdateManyWithoutUserInput;
   rooms?: RoomUpdateManyWithoutMembersInput;
-}
-
-export interface UserUpdateManyWithoutRoomsInput {
-  create?: UserCreateWithoutRoomsInput[] | UserCreateWithoutRoomsInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutRoomsInput[]
-    | UserUpdateWithWhereUniqueWithoutRoomsInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutRoomsInput[]
-    | UserUpsertWithWhereUniqueWithoutRoomsInput;
-}
-
-export interface UserCreateWithoutOwnedRoomsInput {
-  email: String;
-  password: String;
-  nickname: String;
-  firstName?: String;
-  lastName?: String;
-  friends?: UserCreateManyWithoutFriendsInput;
-  movies?: MovieRelationCreateManyWithoutUserInput;
-  rooms?: RoomCreateManyWithoutMembersInput;
-}
-
-export interface RoomUpdateWithoutOwnerDataInput {
-  type?: RoomType;
-  name?: String;
-  members?: UserUpdateManyWithoutRoomsInput;
-}
-
-export interface RoomCreateManyWithoutOwnerInput {
-  create?: RoomCreateWithoutOwnerInput[] | RoomCreateWithoutOwnerInput;
-  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
-}
-
-export interface RoomUpdateManyWithoutOwnerInput {
-  create?: RoomCreateWithoutOwnerInput[] | RoomCreateWithoutOwnerInput;
-  delete?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
-  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
-  disconnect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
-  update?:
-    | RoomUpdateWithWhereUniqueWithoutOwnerInput[]
-    | RoomUpdateWithWhereUniqueWithoutOwnerInput;
-  upsert?:
-    | RoomUpsertWithWhereUniqueWithoutOwnerInput[]
-    | RoomUpsertWithWhereUniqueWithoutOwnerInput;
-}
-
-export interface RoomCreateWithoutOwnerInput {
-  type: RoomType;
-  name: String;
-  members?: UserCreateManyWithoutRoomsInput;
-}
-
-export interface MovieCreateInput {
-  tmdbId?: String;
-  imdbId?: String;
-  traktId?: String;
-}
-
-export interface UserUpdateOneRequiredWithoutOwnedRoomsInput {
-  create?: UserCreateWithoutOwnedRoomsInput;
-  update?: UserUpdateWithoutOwnedRoomsDataInput;
-  upsert?: UserUpsertWithoutOwnedRoomsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface RoomUpsertWithWhereUniqueWithoutMembersInput {
-  where: RoomWhereUniqueInput;
-  update: RoomUpdateWithoutMembersDataInput;
-  create: RoomCreateWithoutMembersInput;
-}
-
-export interface UserCreateWithoutRoomsInput {
-  email: String;
-  password: String;
-  nickname: String;
-  firstName?: String;
-  lastName?: String;
-  friends?: UserCreateManyWithoutFriendsInput;
-  movies?: MovieRelationCreateManyWithoutUserInput;
-  ownedRooms?: RoomCreateManyWithoutOwnerInput;
-}
-
-export interface MovieRelationSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: MovieRelationWhereInput;
-  AND?:
-    | MovieRelationSubscriptionWhereInput[]
-    | MovieRelationSubscriptionWhereInput;
-  OR?:
-    | MovieRelationSubscriptionWhereInput[]
-    | MovieRelationSubscriptionWhereInput;
-  NOT?:
-    | MovieRelationSubscriptionWhereInput[]
-    | MovieRelationSubscriptionWhereInput;
-}
-
-export interface MovieRelationUpdateInput {
-  watched?: Boolean;
-  watchlisted?: Boolean;
-  movie?: MovieUpdateOneRequiredInput;
-  user?: UserUpdateOneRequiredWithoutMoviesInput;
-}
-
-export interface MovieSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: MovieWhereInput;
-  AND?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput;
-  OR?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput;
-  NOT?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput;
-}
-
-export interface MovieUpdateOneRequiredInput {
-  create?: MovieCreateInput;
-  update?: MovieUpdateDataInput;
-  upsert?: MovieUpsertNestedInput;
-  connect?: MovieWhereUniqueInput;
-}
-
-export interface RoomUpdateInput {
-  type?: RoomType;
-  name?: String;
-  owner?: UserUpdateOneRequiredWithoutOwnedRoomsInput;
-  members?: UserUpdateManyWithoutRoomsInput;
-}
-
-export interface MovieUpdateDataInput {
-  tmdbId?: String;
-  imdbId?: String;
-  traktId?: String;
-}
-
-export interface RoomUpsertWithWhereUniqueWithoutOwnerInput {
-  where: RoomWhereUniqueInput;
-  update: RoomUpdateWithoutOwnerDataInput;
-  create: RoomCreateWithoutOwnerInput;
-}
-
-export interface MovieUpsertNestedInput {
-  update: MovieUpdateDataInput;
-  create: MovieCreateInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutRoomsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutRoomsDataInput;
-}
-
-export interface UserUpdateOneRequiredWithoutMoviesInput {
-  create?: UserCreateWithoutMoviesInput;
-  update?: UserUpdateWithoutMoviesDataInput;
-  upsert?: UserUpsertWithoutMoviesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface RoomUpdateWithWhereUniqueWithoutOwnerInput {
-  where: RoomWhereUniqueInput;
-  data: RoomUpdateWithoutOwnerDataInput;
-}
-
-export interface UserUpdateWithoutMoviesDataInput {
-  email?: String;
-  password?: String;
-  nickname?: String;
-  firstName?: String;
-  lastName?: String;
-  friends?: UserUpdateManyWithoutFriendsInput;
-  rooms?: RoomUpdateManyWithoutMembersInput;
-  ownedRooms?: RoomUpdateManyWithoutOwnerInput;
-}
-
-export interface MovieUpdateInput {
-  tmdbId?: String;
-  imdbId?: String;
-  traktId?: String;
-}
-
-export interface UserUpdateManyWithoutFriendsInput {
-  create?: UserCreateWithoutFriendsInput[] | UserCreateWithoutFriendsInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutFriendsInput[]
-    | UserUpdateWithWhereUniqueWithoutFriendsInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutFriendsInput[]
-    | UserUpsertWithWhereUniqueWithoutFriendsInput;
 }
 
 export interface UserWhereInput {
@@ -859,9 +938,21 @@ export interface UserWhereInput {
   lastName_not_starts_with?: String;
   lastName_ends_with?: String;
   lastName_not_ends_with?: String;
-  friends_every?: UserWhereInput;
-  friends_some?: UserWhereInput;
-  friends_none?: UserWhereInput;
+  friendRequestsEmitted_every?: FriendRequestWhereInput;
+  friendRequestsEmitted_some?: FriendRequestWhereInput;
+  friendRequestsEmitted_none?: FriendRequestWhereInput;
+  friendRequestsReceived_every?: FriendRequestWhereInput;
+  friendRequestsReceived_some?: FriendRequestWhereInput;
+  friendRequestsReceived_none?: FriendRequestWhereInput;
+  movieLinks_every?: MovieLinkWhereInput;
+  movieLinks_some?: MovieLinkWhereInput;
+  movieLinks_none?: MovieLinkWhereInput;
+  rooms_every?: RoomWhereInput;
+  rooms_some?: RoomWhereInput;
+  rooms_none?: RoomWhereInput;
+  ownedRooms_every?: RoomWhereInput;
+  ownedRooms_some?: RoomWhereInput;
+  ownedRooms_none?: RoomWhereInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -870,28 +961,252 @@ export interface UserWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
-  movies_every?: MovieRelationWhereInput;
-  movies_some?: MovieRelationWhereInput;
-  movies_none?: MovieRelationWhereInput;
-  rooms_every?: RoomWhereInput;
-  rooms_some?: RoomWhereInput;
-  rooms_none?: RoomWhereInput;
-  ownedRooms_every?: RoomWhereInput;
-  ownedRooms_some?: RoomWhereInput;
-  ownedRooms_none?: RoomWhereInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface UserUpdateWithWhereUniqueWithoutFriendsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutFriendsDataInput;
+export interface FriendRequestUpdateManyWithoutSourceInput {
+  create?:
+    | FriendRequestCreateWithoutSourceInput[]
+    | FriendRequestCreateWithoutSourceInput;
+  delete?: FriendRequestWhereUniqueInput[] | FriendRequestWhereUniqueInput;
+  connect?: FriendRequestWhereUniqueInput[] | FriendRequestWhereUniqueInput;
+  disconnect?: FriendRequestWhereUniqueInput[] | FriendRequestWhereUniqueInput;
+  update?:
+    | FriendRequestUpdateWithWhereUniqueWithoutSourceInput[]
+    | FriendRequestUpdateWithWhereUniqueWithoutSourceInput;
+  upsert?:
+    | FriendRequestUpsertWithWhereUniqueWithoutSourceInput[]
+    | FriendRequestUpsertWithWhereUniqueWithoutSourceInput;
 }
 
-export interface UserUpsertWithoutMoviesInput {
-  update: UserUpdateWithoutMoviesDataInput;
-  create: UserCreateWithoutMoviesInput;
+export interface FriendRequestSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: FriendRequestWhereInput;
+  AND?:
+    | FriendRequestSubscriptionWhereInput[]
+    | FriendRequestSubscriptionWhereInput;
+  OR?:
+    | FriendRequestSubscriptionWhereInput[]
+    | FriendRequestSubscriptionWhereInput;
+  NOT?:
+    | FriendRequestSubscriptionWhereInput[]
+    | FriendRequestSubscriptionWhereInput;
+}
+
+export interface FriendRequestUpdateWithWhereUniqueWithoutSourceInput {
+  where: FriendRequestWhereUniqueInput;
+  data: FriendRequestUpdateWithoutSourceDataInput;
+}
+
+export interface RoomCreateInput {
+  type: RoomType;
+  name: String;
+  owner: UserCreateOneWithoutOwnedRoomsInput;
+  members?: UserCreateManyWithoutRoomsInput;
+}
+
+export interface FriendRequestUpdateWithoutSourceDataInput {
+  target?: UserUpdateOneRequiredWithoutFriendRequestsReceivedInput;
+  status?: FriendRequestStatus;
+}
+
+export interface UserUpdateOneRequiredWithoutMovieLinksInput {
+  create?: UserCreateWithoutMovieLinksInput;
+  update?: UserUpdateWithoutMovieLinksDataInput;
+  upsert?: UserUpsertWithoutMovieLinksInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateOneRequiredWithoutFriendRequestsReceivedInput {
+  create?: UserCreateWithoutFriendRequestsReceivedInput;
+  update?: UserUpdateWithoutFriendRequestsReceivedDataInput;
+  upsert?: UserUpsertWithoutFriendRequestsReceivedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface MovieLinkUpdateInput {
+  watched?: Boolean;
+  watchlisted?: Boolean;
+  movie?: MovieUpdateOneRequiredWithoutMovieLinksInput;
+  user?: UserUpdateOneRequiredWithoutMovieLinksInput;
+}
+
+export interface UserUpdateWithoutFriendRequestsReceivedDataInput {
+  email?: String;
+  password?: String;
+  nickname?: String;
+  firstName?: String;
+  lastName?: String;
+  friendRequestsEmitted?: FriendRequestUpdateManyWithoutSourceInput;
+  movieLinks?: MovieLinkUpdateManyWithoutUserInput;
+  rooms?: RoomUpdateManyWithoutMembersInput;
+  ownedRooms?: RoomUpdateManyWithoutOwnerInput;
+}
+
+export interface MovieUpdateInput {
+  tmdbId?: String;
+  imdbId?: String;
+  traktId?: String;
+  movieLinks?: MovieLinkUpdateManyWithoutMovieInput;
+}
+
+export interface RoomUpdateManyWithoutOwnerInput {
+  create?: RoomCreateWithoutOwnerInput[] | RoomCreateWithoutOwnerInput;
+  delete?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
+  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
+  disconnect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
+  update?:
+    | RoomUpdateWithWhereUniqueWithoutOwnerInput[]
+    | RoomUpdateWithWhereUniqueWithoutOwnerInput;
+  upsert?:
+    | RoomUpsertWithWhereUniqueWithoutOwnerInput[]
+    | RoomUpsertWithWhereUniqueWithoutOwnerInput;
+}
+
+export interface MovieLinkCreateWithoutMovieInput {
+  watched?: Boolean;
+  watchlisted?: Boolean;
+  user: UserCreateOneWithoutMovieLinksInput;
+}
+
+export interface RoomUpdateWithWhereUniqueWithoutOwnerInput {
+  where: RoomWhereUniqueInput;
+  data: RoomUpdateWithoutOwnerDataInput;
+}
+
+export interface UserCreateOneWithoutFriendRequestsEmittedInput {
+  create?: UserCreateWithoutFriendRequestsEmittedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface RoomUpdateWithoutOwnerDataInput {
+  type?: RoomType;
+  name?: String;
+  members?: UserUpdateManyWithoutRoomsInput;
+}
+
+export interface MovieLinkCreateManyWithoutUserInput {
+  create?: MovieLinkCreateWithoutUserInput[] | MovieLinkCreateWithoutUserInput;
+}
+
+export interface UserUpdateManyWithoutRoomsInput {
+  create?: UserCreateWithoutRoomsInput[] | UserCreateWithoutRoomsInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutRoomsInput[]
+    | UserUpdateWithWhereUniqueWithoutRoomsInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutRoomsInput[]
+    | UserUpsertWithWhereUniqueWithoutRoomsInput;
+}
+
+export interface RoomCreateManyWithoutMembersInput {
+  create?: RoomCreateWithoutMembersInput[] | RoomCreateWithoutMembersInput;
+  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutRoomsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutRoomsDataInput;
+}
+
+export interface MovieSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: MovieWhereInput;
+  AND?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput;
+  OR?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput;
+  NOT?: MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput;
+}
+
+export interface UserUpdateWithoutRoomsDataInput {
+  email?: String;
+  password?: String;
+  nickname?: String;
+  firstName?: String;
+  lastName?: String;
+  friendRequestsEmitted?: FriendRequestUpdateManyWithoutSourceInput;
+  friendRequestsReceived?: FriendRequestUpdateManyWithoutTargetInput;
+  movieLinks?: MovieLinkUpdateManyWithoutUserInput;
+  ownedRooms?: RoomUpdateManyWithoutOwnerInput;
+}
+
+export type MovieWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  tmdbId?: String;
+  imdbId?: String;
+  traktId?: String;
+}>;
+
+export interface UserUpsertWithWhereUniqueWithoutRoomsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutRoomsDataInput;
+  create: UserCreateWithoutRoomsInput;
+}
+
+export type RoomWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface RoomUpsertWithWhereUniqueWithoutOwnerInput {
+  where: RoomWhereUniqueInput;
+  update: RoomUpdateWithoutOwnerDataInput;
+  create: RoomCreateWithoutOwnerInput;
+}
+
+export interface MovieCreateOneWithoutMovieLinksInput {
+  create?: MovieCreateWithoutMovieLinksInput;
+  connect?: MovieWhereUniqueInput;
+}
+
+export interface RoomUpsertWithWhereUniqueWithoutMembersInput {
+  where: RoomWhereUniqueInput;
+  update: RoomUpdateWithoutMembersDataInput;
+  create: RoomCreateWithoutMembersInput;
+}
+
+export interface UserUpsertWithoutOwnedRoomsInput {
+  update: UserUpdateWithoutOwnedRoomsDataInput;
+  create: UserCreateWithoutOwnedRoomsInput;
+}
+
+export interface FriendRequestUpsertWithWhereUniqueWithoutSourceInput {
+  where: FriendRequestWhereUniqueInput;
+  update: FriendRequestUpdateWithoutSourceDataInput;
+  create: FriendRequestCreateWithoutSourceInput;
+}
+
+export interface UserUpsertWithoutFriendRequestsReceivedInput {
+  update: UserUpdateWithoutFriendRequestsReceivedDataInput;
+  create: UserCreateWithoutFriendRequestsReceivedInput;
+}
+
+export interface MovieLinkWhereInput {
+  watched?: Boolean;
+  watched_not?: Boolean;
+  watchlisted?: Boolean;
+  watchlisted_not?: Boolean;
+  movie?: MovieWhereInput;
+  user?: UserWhereInput;
+  AND?: MovieLinkWhereInput[] | MovieLinkWhereInput;
+  OR?: MovieLinkWhereInput[] | MovieLinkWhereInput;
+  NOT?: MovieLinkWhereInput[] | MovieLinkWhereInput;
+}
+
+export interface FriendRequestCreateManyWithoutTargetInput {
+  create?:
+    | FriendRequestCreateWithoutTargetInput[]
+    | FriendRequestCreateWithoutTargetInput;
+  connect?: FriendRequestWhereUniqueInput[] | FriendRequestWhereUniqueInput;
 }
 
 export type UserWhereUniqueInput = AtLeastOne<{
@@ -900,66 +1215,23 @@ export type UserWhereUniqueInput = AtLeastOne<{
   nickname?: String;
 }>;
 
-export interface RoomUpdateWithWhereUniqueWithoutMembersInput {
-  where: RoomWhereUniqueInput;
-  data: RoomUpdateWithoutMembersDataInput;
+export interface MovieUpdateWithoutMovieLinksDataInput {
+  tmdbId?: String;
+  imdbId?: String;
+  traktId?: String;
 }
 
-export interface RoomUpdateManyWithoutMembersInput {
-  create?: RoomCreateWithoutMembersInput[] | RoomCreateWithoutMembersInput;
-  delete?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
-  connect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
-  disconnect?: RoomWhereUniqueInput[] | RoomWhereUniqueInput;
-  update?:
-    | RoomUpdateWithWhereUniqueWithoutMembersInput[]
-    | RoomUpdateWithWhereUniqueWithoutMembersInput;
-  upsert?:
-    | RoomUpsertWithWhereUniqueWithoutMembersInput[]
-    | RoomUpsertWithWhereUniqueWithoutMembersInput;
-}
-
-export interface MovieRelationUpdateManyWithoutUserInput {
-  create?:
-    | MovieRelationCreateWithoutUserInput[]
-    | MovieRelationCreateWithoutUserInput;
-}
-
-export interface UserUpdateWithoutFriendsDataInput {
-  email?: String;
-  password?: String;
-  nickname?: String;
+export interface UserCreateInput {
+  email: String;
+  password: String;
+  nickname: String;
   firstName?: String;
   lastName?: String;
-  movies?: MovieRelationUpdateManyWithoutUserInput;
-  rooms?: RoomUpdateManyWithoutMembersInput;
-  ownedRooms?: RoomUpdateManyWithoutOwnerInput;
-}
-
-export type RoomWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserUpdateInput {
-  email?: String;
-  password?: String;
-  nickname?: String;
-  firstName?: String;
-  lastName?: String;
-  friends?: UserUpdateManyWithoutFriendsInput;
-  movies?: MovieRelationUpdateManyWithoutUserInput;
-  rooms?: RoomUpdateManyWithoutMembersInput;
-  ownedRooms?: RoomUpdateManyWithoutOwnerInput;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  friendRequestsEmitted?: FriendRequestCreateManyWithoutSourceInput;
+  friendRequestsReceived?: FriendRequestCreateManyWithoutTargetInput;
+  movieLinks?: MovieLinkCreateManyWithoutUserInput;
+  rooms?: RoomCreateManyWithoutMembersInput;
+  ownedRooms?: RoomCreateManyWithoutOwnerInput;
 }
 
 export interface NodeNode {
@@ -1000,24 +1272,6 @@ export interface UserPreviousValuesSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface MovieConnectionNode {}
-
-export interface MovieConnection
-  extends Promise<MovieConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<MovieEdgeNode>>() => T;
-  aggregate: <T = AggregateMovie>() => T;
-}
-
-export interface MovieConnectionSubscription
-  extends Promise<AsyncIterator<MovieConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<MovieEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateMovieSubscription>() => T;
-}
-
 export interface PageInfoNode {
   hasNextPage: Boolean;
   hasPreviousPage: Boolean;
@@ -1041,46 +1295,59 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface MovieNode {
-  id: ID_Output;
-  tmdbId?: String;
-  imdbId?: String;
-  traktId?: String;
-  createdAt: DateTimeOutput;
+export interface BatchPayloadNode {
+  count: Long;
 }
 
-export interface Movie extends Promise<MovieNode>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  tmdbId: () => Promise<String>;
-  imdbId: () => Promise<String>;
-  traktId: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
+export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
+  count: () => Promise<Long>;
 }
 
-export interface MovieSubscription
-  extends Promise<AsyncIterator<MovieNode>>,
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayloadNode>>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  tmdbId: () => Promise<AsyncIterator<String>>;
-  imdbId: () => Promise<AsyncIterator<String>>;
-  traktId: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface MovieEdgeNode {
+export interface FriendRequestEdgeNode {
   cursor: String;
 }
 
-export interface MovieEdge extends Promise<MovieEdgeNode>, Fragmentable {
-  node: <T = Movie>() => T;
+export interface FriendRequestEdge
+  extends Promise<FriendRequestEdgeNode>,
+    Fragmentable {
+  node: <T = FriendRequest>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface MovieEdgeSubscription
-  extends Promise<AsyncIterator<MovieEdgeNode>>,
+export interface FriendRequestEdgeSubscription
+  extends Promise<AsyncIterator<FriendRequestEdgeNode>>,
     Fragmentable {
-  node: <T = MovieSubscription>() => T;
+  node: <T = FriendRequestSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface RoomSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface RoomSubscriptionPayload
+  extends Promise<RoomSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = Room>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = RoomPreviousValues>() => T;
+}
+
+export interface RoomSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<RoomSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = RoomSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = RoomPreviousValuesSubscription>() => T;
 }
 
 export interface UserSubscriptionPayloadNode {
@@ -1106,193 +1373,56 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface UserNode {
-  id: ID_Output;
-  email: String;
-  password: String;
-  nickname: String;
-  firstName?: String;
-  lastName?: String;
-  createdAt: DateTimeOutput;
-}
+export interface FriendRequestConnectionNode {}
 
-export interface User extends Promise<UserNode>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  password: () => Promise<String>;
-  nickname: () => Promise<String>;
-  firstName: () => Promise<String>;
-  lastName: () => Promise<String>;
-  friends: <T = FragmentableArray<UserNode>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  movies: <T = FragmentableArray<MovieRelationNode>>(
-    args?: {
-      where?: MovieRelationWhereInput;
-      orderBy?: MovieRelationOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  rooms: <T = FragmentableArray<RoomNode>>(
-    args?: {
-      where?: RoomWhereInput;
-      orderBy?: RoomOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  ownedRooms: <T = FragmentableArray<RoomNode>>(
-    args?: {
-      where?: RoomWhereInput;
-      orderBy?: RoomOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<UserNode>>,
+export interface FriendRequestConnection
+  extends Promise<FriendRequestConnectionNode>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  nickname: () => Promise<AsyncIterator<String>>;
-  firstName: () => Promise<AsyncIterator<String>>;
-  lastName: () => Promise<AsyncIterator<String>>;
-  friends: <T = Promise<AsyncIterator<UserSubscription>>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  movies: <T = Promise<AsyncIterator<MovieRelationSubscription>>>(
-    args?: {
-      where?: MovieRelationWhereInput;
-      orderBy?: MovieRelationOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  rooms: <T = Promise<AsyncIterator<RoomSubscription>>>(
-    args?: {
-      where?: RoomWhereInput;
-      orderBy?: RoomOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  ownedRooms: <T = Promise<AsyncIterator<RoomSubscription>>>(
-    args?: {
-      where?: RoomWhereInput;
-      orderBy?: RoomOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = FragmentableArray<FriendRequestEdgeNode>>() => T;
+  aggregate: <T = AggregateFriendRequest>() => T;
 }
 
-export interface BatchPayloadNode {
-  count: Long;
-}
-
-export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayloadNode>>,
+export interface FriendRequestConnectionSubscription
+  extends Promise<AsyncIterator<FriendRequestConnectionNode>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FriendRequestEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFriendRequestSubscription>() => T;
 }
 
-export interface UserEdgeNode {
-  cursor: String;
-}
-
-export interface UserEdge extends Promise<UserEdgeNode>, Fragmentable {
-  node: <T = User>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdgeNode>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface MovieRelationNode {
-  watched: Boolean;
-  watchlisted: Boolean;
-}
-
-export interface MovieRelation
-  extends Promise<MovieRelationNode>,
-    Fragmentable {
-  watched: () => Promise<Boolean>;
-  watchlisted: () => Promise<Boolean>;
-  movie: <T = Movie>() => T;
-  user: <T = User>() => T;
-}
-
-export interface MovieRelationSubscription
-  extends Promise<AsyncIterator<MovieRelationNode>>,
-    Fragmentable {
-  watched: () => Promise<AsyncIterator<Boolean>>;
-  watchlisted: () => Promise<AsyncIterator<Boolean>>;
-  movie: <T = MovieSubscription>() => T;
-  user: <T = UserSubscription>() => T;
-}
-
-export interface AggregateRoomNode {
+export interface AggregateUserNode {
   count: Int;
 }
 
-export interface AggregateRoom
-  extends Promise<AggregateRoomNode>,
+export interface AggregateUser
+  extends Promise<AggregateUserNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateRoomSubscription
-  extends Promise<AsyncIterator<AggregateRoomNode>>,
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUserNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnectionNode {}
+
+export interface UserConnection
+  extends Promise<UserConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = FragmentableArray<UserEdgeNode>>() => T;
+  aggregate: <T = AggregateUser>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 export interface RoomPreviousValuesNode {
@@ -1323,62 +1453,400 @@ export interface RoomPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface RoomConnectionNode {}
+export interface RoomEdgeNode {
+  cursor: String;
+}
 
-export interface RoomConnection
-  extends Promise<RoomConnectionNode>,
+export interface RoomEdge extends Promise<RoomEdgeNode>, Fragmentable {
+  node: <T = Room>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface RoomEdgeSubscription
+  extends Promise<AsyncIterator<RoomEdgeNode>>,
+    Fragmentable {
+  node: <T = RoomSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface RoomNode {
+  id: ID_Output;
+  type: RoomType;
+  name: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface Room extends Promise<RoomNode>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  type: () => Promise<RoomType>;
+  name: () => Promise<String>;
+  owner: <T = User>() => T;
+  members: <T = FragmentableArray<UserNode>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface RoomSubscription
+  extends Promise<AsyncIterator<RoomNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  type: () => Promise<AsyncIterator<RoomType>>;
+  name: () => Promise<AsyncIterator<String>>;
+  owner: <T = UserSubscription>() => T;
+  members: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface AggregateMovieLinkNode {
+  count: Int;
+}
+
+export interface AggregateMovieLink
+  extends Promise<AggregateMovieLinkNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateMovieLinkSubscription
+  extends Promise<AsyncIterator<AggregateMovieLinkNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface FriendRequestNode {
+  id: ID_Output;
+  status: FriendRequestStatus;
+  createdAt: DateTimeOutput;
+}
+
+export interface FriendRequest
+  extends Promise<FriendRequestNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  source: <T = User>() => T;
+  target: <T = User>() => T;
+  status: () => Promise<FriendRequestStatus>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface FriendRequestSubscription
+  extends Promise<AsyncIterator<FriendRequestNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  source: <T = UserSubscription>() => T;
+  target: <T = UserSubscription>() => T;
+  status: () => Promise<AsyncIterator<FriendRequestStatus>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface MovieLinkConnectionNode {}
+
+export interface MovieLinkConnection
+  extends Promise<MovieLinkConnectionNode>,
     Fragmentable {
   pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<RoomEdgeNode>>() => T;
-  aggregate: <T = AggregateRoom>() => T;
+  edges: <T = FragmentableArray<MovieLinkEdgeNode>>() => T;
+  aggregate: <T = AggregateMovieLink>() => T;
 }
 
-export interface RoomConnectionSubscription
-  extends Promise<AsyncIterator<RoomConnectionNode>>,
+export interface MovieLinkConnectionSubscription
+  extends Promise<AsyncIterator<MovieLinkConnectionNode>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<RoomEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateRoomSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<MovieLinkEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateMovieLinkSubscription>() => T;
 }
 
-export interface RoomSubscriptionPayloadNode {
+export interface FriendRequestSubscriptionPayloadNode {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface RoomSubscriptionPayload
-  extends Promise<RoomSubscriptionPayloadNode>,
+export interface FriendRequestSubscriptionPayload
+  extends Promise<FriendRequestSubscriptionPayloadNode>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = Room>() => T;
+  node: <T = FriendRequest>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = RoomPreviousValues>() => T;
+  previousValues: <T = FriendRequestPreviousValues>() => T;
 }
 
-export interface RoomSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<RoomSubscriptionPayloadNode>>,
+export interface FriendRequestSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FriendRequestSubscriptionPayloadNode>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = RoomSubscription>() => T;
+  node: <T = FriendRequestSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = RoomPreviousValuesSubscription>() => T;
+  previousValues: <T = FriendRequestPreviousValuesSubscription>() => T;
 }
 
-export interface MovieRelationEdgeNode {
+export interface MovieEdgeNode {
   cursor: String;
 }
 
-export interface MovieRelationEdge
-  extends Promise<MovieRelationEdgeNode>,
-    Fragmentable {
-  node: <T = MovieRelation>() => T;
+export interface MovieEdge extends Promise<MovieEdgeNode>, Fragmentable {
+  node: <T = Movie>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface MovieRelationEdgeSubscription
-  extends Promise<AsyncIterator<MovieRelationEdgeNode>>,
+export interface MovieEdgeSubscription
+  extends Promise<AsyncIterator<MovieEdgeNode>>,
     Fragmentable {
-  node: <T = MovieRelationSubscription>() => T;
+  node: <T = MovieSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface FriendRequestPreviousValuesNode {
+  id: ID_Output;
+  status: FriendRequestStatus;
+  createdAt: DateTimeOutput;
+}
+
+export interface FriendRequestPreviousValues
+  extends Promise<FriendRequestPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  status: () => Promise<FriendRequestStatus>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface FriendRequestPreviousValuesSubscription
+  extends Promise<AsyncIterator<FriendRequestPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  status: () => Promise<AsyncIterator<FriendRequestStatus>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface UserNode {
+  id: ID_Output;
+  email: String;
+  password: String;
+  nickname: String;
+  firstName?: String;
+  lastName?: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface User extends Promise<UserNode>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  nickname: () => Promise<String>;
+  firstName: () => Promise<String>;
+  lastName: () => Promise<String>;
+  friendRequestsEmitted: <T = FragmentableArray<FriendRequestNode>>(
+    args?: {
+      where?: FriendRequestWhereInput;
+      orderBy?: FriendRequestOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  friendRequestsReceived: <T = FragmentableArray<FriendRequestNode>>(
+    args?: {
+      where?: FriendRequestWhereInput;
+      orderBy?: FriendRequestOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  movieLinks: <T = FragmentableArray<MovieLinkNode>>(
+    args?: {
+      where?: MovieLinkWhereInput;
+      orderBy?: MovieLinkOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  rooms: <T = FragmentableArray<RoomNode>>(
+    args?: {
+      where?: RoomWhereInput;
+      orderBy?: RoomOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  ownedRooms: <T = FragmentableArray<RoomNode>>(
+    args?: {
+      where?: RoomWhereInput;
+      orderBy?: RoomOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<UserNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  nickname: () => Promise<AsyncIterator<String>>;
+  firstName: () => Promise<AsyncIterator<String>>;
+  lastName: () => Promise<AsyncIterator<String>>;
+  friendRequestsEmitted: <
+    T = Promise<AsyncIterator<FriendRequestSubscription>>
+  >(
+    args?: {
+      where?: FriendRequestWhereInput;
+      orderBy?: FriendRequestOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  friendRequestsReceived: <
+    T = Promise<AsyncIterator<FriendRequestSubscription>>
+  >(
+    args?: {
+      where?: FriendRequestWhereInput;
+      orderBy?: FriendRequestOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  movieLinks: <T = Promise<AsyncIterator<MovieLinkSubscription>>>(
+    args?: {
+      where?: MovieLinkWhereInput;
+      orderBy?: MovieLinkOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  rooms: <T = Promise<AsyncIterator<RoomSubscription>>>(
+    args?: {
+      where?: RoomWhereInput;
+      orderBy?: RoomOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  ownedRooms: <T = Promise<AsyncIterator<RoomSubscription>>>(
+    args?: {
+      where?: RoomWhereInput;
+      orderBy?: RoomOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface MovieNode {
+  id: ID_Output;
+  tmdbId?: String;
+  imdbId?: String;
+  traktId?: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface Movie extends Promise<MovieNode>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  tmdbId: () => Promise<String>;
+  imdbId: () => Promise<String>;
+  traktId: () => Promise<String>;
+  movieLinks: <T = FragmentableArray<MovieLinkNode>>(
+    args?: {
+      where?: MovieLinkWhereInput;
+      orderBy?: MovieLinkOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface MovieSubscription
+  extends Promise<AsyncIterator<MovieNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  tmdbId: () => Promise<AsyncIterator<String>>;
+  imdbId: () => Promise<AsyncIterator<String>>;
+  traktId: () => Promise<AsyncIterator<String>>;
+  movieLinks: <T = Promise<AsyncIterator<MovieLinkSubscription>>>(
+    args?: {
+      where?: MovieLinkWhereInput;
+      orderBy?: MovieLinkOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    },
+  ) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface UserEdgeNode {
+  cursor: String;
+}
+
+export interface UserEdge extends Promise<UserEdgeNode>, Fragmentable {
+  node: <T = User>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdgeNode>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -1405,114 +1873,22 @@ export interface MovieSubscriptionPayloadSubscription
   previousValues: <T = MoviePreviousValuesSubscription>() => T;
 }
 
-export interface RoomNode {
-  id: ID_Output;
-  type: RoomType;
-  name: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
+export interface RoomConnectionNode {}
 
-export interface Room extends Promise<RoomNode>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  type: () => Promise<RoomType>;
-  name: () => Promise<String>;
-  owner: <T = User>() => T;
-  members: <T = FragmentableArray<UserNode>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface RoomSubscription
-  extends Promise<AsyncIterator<RoomNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  type: () => Promise<AsyncIterator<RoomType>>;
-  name: () => Promise<AsyncIterator<String>>;
-  owner: <T = UserSubscription>() => T;
-  members: <T = Promise<AsyncIterator<UserSubscription>>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface UserConnectionNode {}
-
-export interface UserConnection
-  extends Promise<UserConnectionNode>,
+export interface RoomConnection
+  extends Promise<RoomConnectionNode>,
     Fragmentable {
   pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<UserEdgeNode>>() => T;
-  aggregate: <T = AggregateUser>() => T;
+  edges: <T = FragmentableArray<RoomEdgeNode>>() => T;
+  aggregate: <T = AggregateRoom>() => T;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnectionNode>>,
+export interface RoomConnectionSubscription
+  extends Promise<AsyncIterator<RoomConnectionNode>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface MovieRelationPreviousValuesNode {
-  watched: Boolean;
-  watchlisted: Boolean;
-}
-
-export interface MovieRelationPreviousValues
-  extends Promise<MovieRelationPreviousValuesNode>,
-    Fragmentable {
-  watched: () => Promise<Boolean>;
-  watchlisted: () => Promise<Boolean>;
-}
-
-export interface MovieRelationPreviousValuesSubscription
-  extends Promise<AsyncIterator<MovieRelationPreviousValuesNode>>,
-    Fragmentable {
-  watched: () => Promise<AsyncIterator<Boolean>>;
-  watchlisted: () => Promise<AsyncIterator<Boolean>>;
-}
-
-export interface MovieRelationSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface MovieRelationSubscriptionPayload
-  extends Promise<MovieRelationSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = MovieRelation>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = MovieRelationPreviousValues>() => T;
-}
-
-export interface MovieRelationSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<MovieRelationSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = MovieRelationSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = MovieRelationPreviousValuesSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<RoomEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateRoomSubscription>() => T;
 }
 
 export interface AggregateMovieNode {
@@ -1529,6 +1905,69 @@ export interface AggregateMovieSubscription
   extends Promise<AsyncIterator<AggregateMovieNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface MovieLinkPreviousValuesNode {
+  watched: Boolean;
+  watchlisted: Boolean;
+}
+
+export interface MovieLinkPreviousValues
+  extends Promise<MovieLinkPreviousValuesNode>,
+    Fragmentable {
+  watched: () => Promise<Boolean>;
+  watchlisted: () => Promise<Boolean>;
+}
+
+export interface MovieLinkPreviousValuesSubscription
+  extends Promise<AsyncIterator<MovieLinkPreviousValuesNode>>,
+    Fragmentable {
+  watched: () => Promise<AsyncIterator<Boolean>>;
+  watchlisted: () => Promise<AsyncIterator<Boolean>>;
+}
+
+export interface MovieLinkSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface MovieLinkSubscriptionPayload
+  extends Promise<MovieLinkSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = MovieLink>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = MovieLinkPreviousValues>() => T;
+}
+
+export interface MovieLinkSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<MovieLinkSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = MovieLinkSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = MovieLinkPreviousValuesSubscription>() => T;
+}
+
+export interface MovieLinkNode {
+  watched: Boolean;
+  watchlisted: Boolean;
+}
+
+export interface MovieLink extends Promise<MovieLinkNode>, Fragmentable {
+  watched: () => Promise<Boolean>;
+  watchlisted: () => Promise<Boolean>;
+  movie: <T = Movie>() => T;
+  user: <T = User>() => T;
+}
+
+export interface MovieLinkSubscription
+  extends Promise<AsyncIterator<MovieLinkNode>>,
+    Fragmentable {
+  watched: () => Promise<AsyncIterator<Boolean>>;
+  watchlisted: () => Promise<AsyncIterator<Boolean>>;
+  movie: <T = MovieSubscription>() => T;
+  user: <T = UserSubscription>() => T;
 }
 
 export interface MoviePreviousValuesNode {
@@ -1559,68 +1998,70 @@ export interface MoviePreviousValuesSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface RoomEdgeNode {
+export interface MovieConnectionNode {}
+
+export interface MovieConnection
+  extends Promise<MovieConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = FragmentableArray<MovieEdgeNode>>() => T;
+  aggregate: <T = AggregateMovie>() => T;
+}
+
+export interface MovieConnectionSubscription
+  extends Promise<AsyncIterator<MovieConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<MovieEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateMovieSubscription>() => T;
+}
+
+export interface MovieLinkEdgeNode {
   cursor: String;
 }
 
-export interface RoomEdge extends Promise<RoomEdgeNode>, Fragmentable {
-  node: <T = Room>() => T;
+export interface MovieLinkEdge
+  extends Promise<MovieLinkEdgeNode>,
+    Fragmentable {
+  node: <T = MovieLink>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface RoomEdgeSubscription
-  extends Promise<AsyncIterator<RoomEdgeNode>>,
+export interface MovieLinkEdgeSubscription
+  extends Promise<AsyncIterator<MovieLinkEdgeNode>>,
     Fragmentable {
-  node: <T = RoomSubscription>() => T;
+  node: <T = MovieLinkSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateUserNode {
+export interface AggregateRoomNode {
   count: Int;
 }
 
-export interface AggregateUser
-  extends Promise<AggregateUserNode>,
+export interface AggregateRoom
+  extends Promise<AggregateRoomNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUserNode>>,
+export interface AggregateRoomSubscription
+  extends Promise<AsyncIterator<AggregateRoomNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface MovieRelationConnectionNode {}
-
-export interface MovieRelationConnection
-  extends Promise<MovieRelationConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<MovieRelationEdgeNode>>() => T;
-  aggregate: <T = AggregateMovieRelation>() => T;
-}
-
-export interface MovieRelationConnectionSubscription
-  extends Promise<AsyncIterator<MovieRelationConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<MovieRelationEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateMovieRelationSubscription>() => T;
-}
-
-export interface AggregateMovieRelationNode {
+export interface AggregateFriendRequestNode {
   count: Int;
 }
 
-export interface AggregateMovieRelation
-  extends Promise<AggregateMovieRelationNode>,
+export interface AggregateFriendRequest
+  extends Promise<AggregateFriendRequestNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateMovieRelationSubscription
-  extends Promise<AsyncIterator<AggregateMovieRelationNode>>,
+export interface AggregateFriendRequestSubscription
+  extends Promise<AsyncIterator<AggregateFriendRequestNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -1635,13 +2076,13 @@ DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
 
-export type Long = string;
-
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
 export type ID_Input = string | number;
 export type ID_Output = string;
+
+export type Long = string;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
@@ -1649,14 +2090,14 @@ The `Boolean` scalar type represents `true` or `false`.
 export type Boolean = boolean;
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
-
-/*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
+
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
 
 /**
  * Type Defs
@@ -1664,6 +2105,6 @@ export type String = string;
 
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
-  endpoint: `http://localhost:4466`
+  endpoint: `http://localhost:4466`,
 });
 export const prisma = new Prisma();

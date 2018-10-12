@@ -1,7 +1,7 @@
 import { Args, Info, Mutation, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'crypto';
-import { User } from '../prisma/prisma.binding';
+import { UserNode } from '../prisma/prisma.binding';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from './auth.service';
 
@@ -21,7 +21,7 @@ export class AuthResolver {
     @Args('firstName') firstName: string,
     @Args('lastName') lastName: string,
     @Info() info,
-  ): Promise<any> {
+  ): Promise<{ token: string; user: UserNode }> {
     const hash = createHash('sha256');
     let regex: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -30,8 +30,12 @@ export class AuthResolver {
 
     //request mutation
     password = <string>hash.update(password).digest('hex');
-    let user: User = await this.prisma.mutation.createUser({
-      data: { email, password, firstName, lastName, nickname },
+    let user = await this.prisma.r.createUser({
+      email,
+      password,
+      firstName,
+      lastName,
+      nickname,
     });
     if (!user) throw new Error('create user failed ! ');
 
@@ -44,9 +48,9 @@ export class AuthResolver {
     @Args('email') email: string,
     @Args('password') password: string,
     @Info() info,
-  ): Promise<any> {
+  ): Promise<{ token: string; user: UserNode }> {
     const hash = createHash('sha256');
-    let user: User = await this.prisma.query.user({ where: { email } });
+    const user = await this.prisma.r.user({ email });
 
     if (!user || user.password != <string>hash.update(password).digest('hex'))
       throw new Error('Email or password wrong !');

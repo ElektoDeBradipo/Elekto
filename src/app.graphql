@@ -1,0 +1,104 @@
+scalar Date
+
+type Query {
+  #UserModule
+  me: User
+  user(id: ID!): User
+
+  #MovieModule
+  movie(id: ID!): Movie
+
+  #RoomModule
+  room(id: ID!): Room
+}
+
+type Mutation {
+  #AuthModule
+  signup(
+    nickname: String!
+    email: String!
+    password: String!
+    firstName: String
+    lastName: String
+  ): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+
+  #UserModule
+  userUpdate(
+    id: ID!
+    nickname: String
+    firstName: String
+    lastName: String
+  ): User
+  friendAdd(friendId: ID!): User
+  friendRemove(friendId: ID!): User
+  userWatched(movieId: ID!, value: Boolean!): Movie
+  userWatchlisted(movieId: ID!, value: Boolean!): Movie
+
+  #RoomModule
+  roomCreate(name: String!, type: RoomType!): Room
+  roomAdd(users: [ID]!): [User!]!
+  roomRemove(users: [ID]!): [User!]!
+  roomUpdate(name: String, type: RoomType): Room
+  roomDelete(id: ID!): ID
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+type User {
+  id: ID!
+  email: String!
+  nickname: String!
+  firstName: String
+  lastName: String
+  friends: [Friend!]!
+  movies(watched: Boolean, watchlisted: Boolean): [UserMovie!]!
+  rooms: [UserRoom!]!
+}
+
+type Movie {
+  id: ID!
+  title: String!
+  releaseDate: Date!
+  overview: String!
+}
+
+type Room {
+  id: ID!
+  type: RoomType!
+  name: String!
+  owner: User!
+  members: [User!]!
+  movies(mode: MovieModeInput): [Movie!]
+}
+
+type Friend inherits User {
+    friendship: Friendship!
+}
+
+type UserMovie inherits Movie {
+    watched: Boolean!
+    watchlisted: Boolean!
+}
+
+type UserRoom inherits Room {
+    owned: Boolean!
+}
+
+enum RoomType {
+  MOVIE
+}
+
+enum MovieModeInput {
+  TRENDING
+  WATCHLISTED
+}
+
+enum Friendship {
+    ACCEPTED,
+    PENDING,
+    BLOCKED
+}

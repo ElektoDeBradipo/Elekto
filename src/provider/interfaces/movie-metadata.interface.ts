@@ -1,9 +1,9 @@
-import { IMovie, IMovieFull } from '../../movie/movie.interface';
+import { Movie } from '../../app.interface';
 
 export interface IMovieMetadataProvider {
-  getMovie(id: string): IMovie | Promise<IMovie>;
+  getMovie(id: string): Movie | Promise<Movie>;
   getTrendingMovies(
     number: number,
     excludes: string[],
-  ): IMovieFull[] | Promise<IMovieFull[]>;
+  ): Movie[] | Promise<Movie[]>;
 }

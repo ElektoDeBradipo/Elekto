@@ -29,7 +29,7 @@ mutation {
   updateUser1: updateUser(
     where: { nickname: "user1" }
     data: {
-      movies: {
+      movieLinks: {
         create: [
           {
             watched: false
@@ -60,7 +60,7 @@ mutation {
   updateUser2: updateUser(
     where: { nickname: "user2" }
     data: {
-      movies: {
+      movieLinks: {
         create: [
           {
             watched: false
@@ -91,7 +91,7 @@ mutation {
   updateUser3: updateUser(
     where: { nickname: "user3" }
     data: {
-      movies: {
+      movieLinks: {
         create: [
           {
             watched: false

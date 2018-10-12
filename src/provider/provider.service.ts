@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IMovie, IMovieFull, IMovieIds } from '../movie/movie.interface';
+import { Movie } from '../app.interface';
+import { MovieNode } from '../prisma/prisma.binding';
 import { PrismaService } from '../prisma/prisma.service';
 import { TmdbProvider } from './tmdb.provider';
 
@@ -10,21 +11,21 @@ export class ProviderService {
     private prisma: PrismaService,
   ) {}
 
-  async getMovie(ids: IMovieIds): Promise<IMovieFull> {
-    let movie: IMovie;
-    if (ids.tmdbId) {
-      movie = await this.tmdbProvider.getMovie(ids.tmdbId);
+  async getMovie(movieNode: MovieNode): Promise<Movie> {
+    let movie: Movie;
+    if (movieNode.tmdbId) {
+      movie = await this.tmdbProvider.getMovie(movieNode.tmdbId);
     } else {
       throw new Error('No provider');
     }
 
-    return { ...movie, id: ids.id };
+    return { ...movie, id: movieNode.id };
   }
 
   async getTrendingMovies(
     number: number = 20,
-    excludes: IMovieIds[] = [],
-  ): Promise<IMovieFull[]> {
+    excludes: MovieNode[] = [],
+  ): Promise<Movie[]> {
     const tmdbIds = excludes.filter(x => x.tmdbId).map(x => x.tmdbId);
 
     const tmdbMovies = await this.tmdbProvider.getTrendingMovies(
@@ -32,16 +33,12 @@ export class ProviderService {
       tmdbIds,
     );
 
-    const movies: IMovieFull[] = [];
+    const movies: Movie[] = [];
     for (const tmdbMovie of tmdbMovies) {
-      let movieDb = await this.prisma.query.movie({
-        where: { tmdbId: tmdbMovie.id },
-      });
+      let movieDb = await this.prisma.r.movie({ tmdbId: tmdbMovie.id });
 
       if (!movieDb) {
-        movieDb = await this.prisma.mutation.createMovie({
-          data: { tmdbId: tmdbMovie.id },
-        });
+        movieDb = await this.prisma.r.createMovie({ tmdbId: tmdbMovie.id });
       }
 
       movies.push({ ...tmdbMovie, id: movieDb.id });

@@ -1,8 +1,12 @@
-export const typeDefs = /* GraphQL */ `type AggregateMovie {
+export const typeDefs = /* GraphQL */ `type AggregateFriendRequest {
   count: Int!
 }
 
-type AggregateMovieRelation {
+type AggregateMovie {
+  count: Int!
+}
+
+type AggregateMovieLink {
   count: Int!
 }
 
@@ -20,6 +24,186 @@ type BatchPayload {
 
 scalar DateTime
 
+type FriendRequest {
+  id: ID!
+  source: User!
+  target: User!
+  status: FriendRequestStatus!
+  createdAt: DateTime!
+}
+
+type FriendRequestConnection {
+  pageInfo: PageInfo!
+  edges: [FriendRequestEdge]!
+  aggregate: AggregateFriendRequest!
+}
+
+input FriendRequestCreateInput {
+  source: UserCreateOneWithoutFriendRequestsEmittedInput!
+  target: UserCreateOneWithoutFriendRequestsReceivedInput!
+  status: FriendRequestStatus
+}
+
+input FriendRequestCreateManyWithoutSourceInput {
+  create: [FriendRequestCreateWithoutSourceInput!]
+  connect: [FriendRequestWhereUniqueInput!]
+}
+
+input FriendRequestCreateManyWithoutTargetInput {
+  create: [FriendRequestCreateWithoutTargetInput!]
+  connect: [FriendRequestWhereUniqueInput!]
+}
+
+input FriendRequestCreateWithoutSourceInput {
+  target: UserCreateOneWithoutFriendRequestsReceivedInput!
+  status: FriendRequestStatus
+}
+
+input FriendRequestCreateWithoutTargetInput {
+  source: UserCreateOneWithoutFriendRequestsEmittedInput!
+  status: FriendRequestStatus
+}
+
+type FriendRequestEdge {
+  node: FriendRequest!
+  cursor: String!
+}
+
+enum FriendRequestOrderByInput {
+  id_ASC
+  id_DESC
+  status_ASC
+  status_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type FriendRequestPreviousValues {
+  id: ID!
+  status: FriendRequestStatus!
+  createdAt: DateTime!
+}
+
+enum FriendRequestStatus {
+  PENDING
+  APPROUVED
+  BLOCKED
+}
+
+type FriendRequestSubscriptionPayload {
+  mutation: MutationType!
+  node: FriendRequest
+  updatedFields: [String!]
+  previousValues: FriendRequestPreviousValues
+}
+
+input FriendRequestSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: FriendRequestWhereInput
+  AND: [FriendRequestSubscriptionWhereInput!]
+  OR: [FriendRequestSubscriptionWhereInput!]
+  NOT: [FriendRequestSubscriptionWhereInput!]
+}
+
+input FriendRequestUpdateInput {
+  source: UserUpdateOneRequiredWithoutFriendRequestsEmittedInput
+  target: UserUpdateOneRequiredWithoutFriendRequestsReceivedInput
+  status: FriendRequestStatus
+}
+
+input FriendRequestUpdateManyWithoutSourceInput {
+  create: [FriendRequestCreateWithoutSourceInput!]
+  delete: [FriendRequestWhereUniqueInput!]
+  connect: [FriendRequestWhereUniqueInput!]
+  disconnect: [FriendRequestWhereUniqueInput!]
+  update: [FriendRequestUpdateWithWhereUniqueWithoutSourceInput!]
+  upsert: [FriendRequestUpsertWithWhereUniqueWithoutSourceInput!]
+}
+
+input FriendRequestUpdateManyWithoutTargetInput {
+  create: [FriendRequestCreateWithoutTargetInput!]
+  delete: [FriendRequestWhereUniqueInput!]
+  connect: [FriendRequestWhereUniqueInput!]
+  disconnect: [FriendRequestWhereUniqueInput!]
+  update: [FriendRequestUpdateWithWhereUniqueWithoutTargetInput!]
+  upsert: [FriendRequestUpsertWithWhereUniqueWithoutTargetInput!]
+}
+
+input FriendRequestUpdateWithoutSourceDataInput {
+  target: UserUpdateOneRequiredWithoutFriendRequestsReceivedInput
+  status: FriendRequestStatus
+}
+
+input FriendRequestUpdateWithoutTargetDataInput {
+  source: UserUpdateOneRequiredWithoutFriendRequestsEmittedInput
+  status: FriendRequestStatus
+}
+
+input FriendRequestUpdateWithWhereUniqueWithoutSourceInput {
+  where: FriendRequestWhereUniqueInput!
+  data: FriendRequestUpdateWithoutSourceDataInput!
+}
+
+input FriendRequestUpdateWithWhereUniqueWithoutTargetInput {
+  where: FriendRequestWhereUniqueInput!
+  data: FriendRequestUpdateWithoutTargetDataInput!
+}
+
+input FriendRequestUpsertWithWhereUniqueWithoutSourceInput {
+  where: FriendRequestWhereUniqueInput!
+  update: FriendRequestUpdateWithoutSourceDataInput!
+  create: FriendRequestCreateWithoutSourceInput!
+}
+
+input FriendRequestUpsertWithWhereUniqueWithoutTargetInput {
+  where: FriendRequestWhereUniqueInput!
+  update: FriendRequestUpdateWithoutTargetDataInput!
+  create: FriendRequestCreateWithoutTargetInput!
+}
+
+input FriendRequestWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  source: UserWhereInput
+  target: UserWhereInput
+  status: FriendRequestStatus
+  status_not: FriendRequestStatus
+  status_in: [FriendRequestStatus!]
+  status_not_in: [FriendRequestStatus!]
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [FriendRequestWhereInput!]
+  OR: [FriendRequestWhereInput!]
+  NOT: [FriendRequestWhereInput!]
+}
+
+input FriendRequestWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Movie {
@@ -27,6 +211,7 @@ type Movie {
   tmdbId: String
   imdbId: String
   traktId: String
+  movieLinks(where: MovieLinkWhereInput, orderBy: MovieLinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MovieLink!]
   createdAt: DateTime!
 }
 
@@ -40,16 +225,131 @@ input MovieCreateInput {
   tmdbId: String
   imdbId: String
   traktId: String
+  movieLinks: MovieLinkCreateManyWithoutMovieInput
 }
 
-input MovieCreateOneInput {
-  create: MovieCreateInput
+input MovieCreateOneWithoutMovieLinksInput {
+  create: MovieCreateWithoutMovieLinksInput
   connect: MovieWhereUniqueInput
+}
+
+input MovieCreateWithoutMovieLinksInput {
+  tmdbId: String
+  imdbId: String
+  traktId: String
 }
 
 type MovieEdge {
   node: Movie!
   cursor: String!
+}
+
+type MovieLink {
+  watched: Boolean!
+  watchlisted: Boolean!
+  movie: Movie!
+  user: User!
+}
+
+type MovieLinkConnection {
+  pageInfo: PageInfo!
+  edges: [MovieLinkEdge]!
+  aggregate: AggregateMovieLink!
+}
+
+input MovieLinkCreateInput {
+  watched: Boolean
+  watchlisted: Boolean
+  movie: MovieCreateOneWithoutMovieLinksInput!
+  user: UserCreateOneWithoutMovieLinksInput!
+}
+
+input MovieLinkCreateManyWithoutMovieInput {
+  create: [MovieLinkCreateWithoutMovieInput!]
+}
+
+input MovieLinkCreateManyWithoutUserInput {
+  create: [MovieLinkCreateWithoutUserInput!]
+}
+
+input MovieLinkCreateWithoutMovieInput {
+  watched: Boolean
+  watchlisted: Boolean
+  user: UserCreateOneWithoutMovieLinksInput!
+}
+
+input MovieLinkCreateWithoutUserInput {
+  watched: Boolean
+  watchlisted: Boolean
+  movie: MovieCreateOneWithoutMovieLinksInput!
+}
+
+type MovieLinkEdge {
+  node: MovieLink!
+  cursor: String!
+}
+
+enum MovieLinkOrderByInput {
+  watched_ASC
+  watched_DESC
+  watchlisted_ASC
+  watchlisted_DESC
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type MovieLinkPreviousValues {
+  watched: Boolean!
+  watchlisted: Boolean!
+}
+
+type MovieLinkSubscriptionPayload {
+  mutation: MutationType!
+  node: MovieLink
+  updatedFields: [String!]
+  previousValues: MovieLinkPreviousValues
+}
+
+input MovieLinkSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MovieLinkWhereInput
+  AND: [MovieLinkSubscriptionWhereInput!]
+  OR: [MovieLinkSubscriptionWhereInput!]
+  NOT: [MovieLinkSubscriptionWhereInput!]
+}
+
+input MovieLinkUpdateInput {
+  watched: Boolean
+  watchlisted: Boolean
+  movie: MovieUpdateOneRequiredWithoutMovieLinksInput
+  user: UserUpdateOneRequiredWithoutMovieLinksInput
+}
+
+input MovieLinkUpdateManyWithoutMovieInput {
+  create: [MovieLinkCreateWithoutMovieInput!]
+}
+
+input MovieLinkUpdateManyWithoutUserInput {
+  create: [MovieLinkCreateWithoutUserInput!]
+}
+
+input MovieLinkWhereInput {
+  watched: Boolean
+  watched_not: Boolean
+  watchlisted: Boolean
+  watchlisted_not: Boolean
+  movie: MovieWhereInput
+  user: UserWhereInput
+  AND: [MovieLinkWhereInput!]
+  OR: [MovieLinkWhereInput!]
+  NOT: [MovieLinkWhereInput!]
 }
 
 enum MovieOrderByInput {
@@ -75,100 +375,6 @@ type MoviePreviousValues {
   createdAt: DateTime!
 }
 
-type MovieRelation {
-  watched: Boolean!
-  watchlisted: Boolean!
-  movie: Movie!
-  user: User!
-}
-
-type MovieRelationConnection {
-  pageInfo: PageInfo!
-  edges: [MovieRelationEdge]!
-  aggregate: AggregateMovieRelation!
-}
-
-input MovieRelationCreateInput {
-  watched: Boolean!
-  watchlisted: Boolean!
-  movie: MovieCreateOneInput!
-  user: UserCreateOneWithoutMoviesInput!
-}
-
-input MovieRelationCreateManyWithoutUserInput {
-  create: [MovieRelationCreateWithoutUserInput!]
-}
-
-input MovieRelationCreateWithoutUserInput {
-  watched: Boolean!
-  watchlisted: Boolean!
-  movie: MovieCreateOneInput!
-}
-
-type MovieRelationEdge {
-  node: MovieRelation!
-  cursor: String!
-}
-
-enum MovieRelationOrderByInput {
-  watched_ASC
-  watched_DESC
-  watchlisted_ASC
-  watchlisted_DESC
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type MovieRelationPreviousValues {
-  watched: Boolean!
-  watchlisted: Boolean!
-}
-
-type MovieRelationSubscriptionPayload {
-  mutation: MutationType!
-  node: MovieRelation
-  updatedFields: [String!]
-  previousValues: MovieRelationPreviousValues
-}
-
-input MovieRelationSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: MovieRelationWhereInput
-  AND: [MovieRelationSubscriptionWhereInput!]
-  OR: [MovieRelationSubscriptionWhereInput!]
-  NOT: [MovieRelationSubscriptionWhereInput!]
-}
-
-input MovieRelationUpdateInput {
-  watched: Boolean
-  watchlisted: Boolean
-  movie: MovieUpdateOneRequiredInput
-  user: UserUpdateOneRequiredWithoutMoviesInput
-}
-
-input MovieRelationUpdateManyWithoutUserInput {
-  create: [MovieRelationCreateWithoutUserInput!]
-}
-
-input MovieRelationWhereInput {
-  watched: Boolean
-  watched_not: Boolean
-  watchlisted: Boolean
-  watchlisted_not: Boolean
-  movie: MovieWhereInput
-  user: UserWhereInput
-  AND: [MovieRelationWhereInput!]
-  OR: [MovieRelationWhereInput!]
-  NOT: [MovieRelationWhereInput!]
-}
-
 type MovieSubscriptionPayload {
   mutation: MutationType!
   node: Movie
@@ -187,28 +393,29 @@ input MovieSubscriptionWhereInput {
   NOT: [MovieSubscriptionWhereInput!]
 }
 
-input MovieUpdateDataInput {
-  tmdbId: String
-  imdbId: String
-  traktId: String
-}
-
 input MovieUpdateInput {
   tmdbId: String
   imdbId: String
   traktId: String
+  movieLinks: MovieLinkUpdateManyWithoutMovieInput
 }
 
-input MovieUpdateOneRequiredInput {
-  create: MovieCreateInput
-  update: MovieUpdateDataInput
-  upsert: MovieUpsertNestedInput
+input MovieUpdateOneRequiredWithoutMovieLinksInput {
+  create: MovieCreateWithoutMovieLinksInput
+  update: MovieUpdateWithoutMovieLinksDataInput
+  upsert: MovieUpsertWithoutMovieLinksInput
   connect: MovieWhereUniqueInput
 }
 
-input MovieUpsertNestedInput {
-  update: MovieUpdateDataInput!
-  create: MovieCreateInput!
+input MovieUpdateWithoutMovieLinksDataInput {
+  tmdbId: String
+  imdbId: String
+  traktId: String
+}
+
+input MovieUpsertWithoutMovieLinksInput {
+  update: MovieUpdateWithoutMovieLinksDataInput!
+  create: MovieCreateWithoutMovieLinksInput!
 }
 
 input MovieWhereInput {
@@ -268,6 +475,9 @@ input MovieWhereInput {
   traktId_not_starts_with: String
   traktId_ends_with: String
   traktId_not_ends_with: String
+  movieLinks_every: MovieLinkWhereInput
+  movieLinks_some: MovieLinkWhereInput
+  movieLinks_none: MovieLinkWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -289,15 +499,21 @@ input MovieWhereUniqueInput {
 }
 
 type Mutation {
+  createFriendRequest(data: FriendRequestCreateInput!): FriendRequest!
+  updateFriendRequest(data: FriendRequestUpdateInput!, where: FriendRequestWhereUniqueInput!): FriendRequest
+  updateManyFriendRequests(data: FriendRequestUpdateInput!, where: FriendRequestWhereInput): BatchPayload!
+  upsertFriendRequest(where: FriendRequestWhereUniqueInput!, create: FriendRequestCreateInput!, update: FriendRequestUpdateInput!): FriendRequest!
+  deleteFriendRequest(where: FriendRequestWhereUniqueInput!): FriendRequest
+  deleteManyFriendRequests(where: FriendRequestWhereInput): BatchPayload!
   createMovie(data: MovieCreateInput!): Movie!
   updateMovie(data: MovieUpdateInput!, where: MovieWhereUniqueInput!): Movie
   updateManyMovies(data: MovieUpdateInput!, where: MovieWhereInput): BatchPayload!
   upsertMovie(where: MovieWhereUniqueInput!, create: MovieCreateInput!, update: MovieUpdateInput!): Movie!
   deleteMovie(where: MovieWhereUniqueInput!): Movie
   deleteManyMovies(where: MovieWhereInput): BatchPayload!
-  createMovieRelation(data: MovieRelationCreateInput!): MovieRelation!
-  updateManyMovieRelations(data: MovieRelationUpdateInput!, where: MovieRelationWhereInput): BatchPayload!
-  deleteManyMovieRelations(where: MovieRelationWhereInput): BatchPayload!
+  createMovieLink(data: MovieLinkCreateInput!): MovieLink!
+  updateManyMovieLinks(data: MovieLinkUpdateInput!, where: MovieLinkWhereInput): BatchPayload!
+  deleteManyMovieLinks(where: MovieLinkWhereInput): BatchPayload!
   createRoom(data: RoomCreateInput!): Room!
   updateRoom(data: RoomUpdateInput!, where: RoomWhereUniqueInput!): Room
   updateManyRooms(data: RoomUpdateInput!, where: RoomWhereInput): BatchPayload!
@@ -330,11 +546,14 @@ type PageInfo {
 }
 
 type Query {
+  friendRequest(where: FriendRequestWhereUniqueInput!): FriendRequest
+  friendRequests(where: FriendRequestWhereInput, orderBy: FriendRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FriendRequest]!
+  friendRequestsConnection(where: FriendRequestWhereInput, orderBy: FriendRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FriendRequestConnection!
   movie(where: MovieWhereUniqueInput!): Movie
   movies(where: MovieWhereInput, orderBy: MovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Movie]!
   moviesConnection(where: MovieWhereInput, orderBy: MovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MovieConnection!
-  movieRelations(where: MovieRelationWhereInput, orderBy: MovieRelationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MovieRelation]!
-  movieRelationsConnection(where: MovieRelationWhereInput, orderBy: MovieRelationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MovieRelationConnection!
+  movieLinks(where: MovieLinkWhereInput, orderBy: MovieLinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MovieLink]!
+  movieLinksConnection(where: MovieLinkWhereInput, orderBy: MovieLinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MovieLinkConnection!
   room(where: RoomWhereUniqueInput!): Room
   rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room]!
   roomsConnection(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RoomConnection!
@@ -559,8 +778,9 @@ input RoomWhereUniqueInput {
 }
 
 type Subscription {
+  friendRequest(where: FriendRequestSubscriptionWhereInput): FriendRequestSubscriptionPayload
   movie(where: MovieSubscriptionWhereInput): MovieSubscriptionPayload
-  movieRelation(where: MovieRelationSubscriptionWhereInput): MovieRelationSubscriptionPayload
+  movieLink(where: MovieLinkSubscriptionWhereInput): MovieLinkSubscriptionPayload
   room(where: RoomSubscriptionWhereInput): RoomSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -572,11 +792,12 @@ type User {
   nickname: String!
   firstName: String
   lastName: String
-  friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
-  createdAt: DateTime!
-  movies(where: MovieRelationWhereInput, orderBy: MovieRelationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MovieRelation!]
+  friendRequestsEmitted(where: FriendRequestWhereInput, orderBy: FriendRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FriendRequest!]
+  friendRequestsReceived(where: FriendRequestWhereInput, orderBy: FriendRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FriendRequest!]
+  movieLinks(where: MovieLinkWhereInput, orderBy: MovieLinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MovieLink!]
   rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room!]
   ownedRooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room!]
+  createdAt: DateTime!
 }
 
 type UserConnection {
@@ -591,15 +812,11 @@ input UserCreateInput {
   nickname: String!
   firstName: String
   lastName: String
-  friends: UserCreateManyWithoutFriendsInput
-  movies: MovieRelationCreateManyWithoutUserInput
+  friendRequestsEmitted: FriendRequestCreateManyWithoutSourceInput
+  friendRequestsReceived: FriendRequestCreateManyWithoutTargetInput
+  movieLinks: MovieLinkCreateManyWithoutUserInput
   rooms: RoomCreateManyWithoutMembersInput
   ownedRooms: RoomCreateManyWithoutOwnerInput
-}
-
-input UserCreateManyWithoutFriendsInput {
-  create: [UserCreateWithoutFriendsInput!]
-  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutRoomsInput {
@@ -607,8 +824,18 @@ input UserCreateManyWithoutRoomsInput {
   connect: [UserWhereUniqueInput!]
 }
 
-input UserCreateOneWithoutMoviesInput {
-  create: UserCreateWithoutMoviesInput
+input UserCreateOneWithoutFriendRequestsEmittedInput {
+  create: UserCreateWithoutFriendRequestsEmittedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutFriendRequestsReceivedInput {
+  create: UserCreateWithoutFriendRequestsReceivedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutMovieLinksInput {
+  create: UserCreateWithoutMovieLinksInput
   connect: UserWhereUniqueInput
 }
 
@@ -617,24 +844,38 @@ input UserCreateOneWithoutOwnedRoomsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateWithoutFriendsInput {
+input UserCreateWithoutFriendRequestsEmittedInput {
   email: String!
   password: String!
   nickname: String!
   firstName: String
   lastName: String
-  movies: MovieRelationCreateManyWithoutUserInput
+  friendRequestsReceived: FriendRequestCreateManyWithoutTargetInput
+  movieLinks: MovieLinkCreateManyWithoutUserInput
   rooms: RoomCreateManyWithoutMembersInput
   ownedRooms: RoomCreateManyWithoutOwnerInput
 }
 
-input UserCreateWithoutMoviesInput {
+input UserCreateWithoutFriendRequestsReceivedInput {
   email: String!
   password: String!
   nickname: String!
   firstName: String
   lastName: String
-  friends: UserCreateManyWithoutFriendsInput
+  friendRequestsEmitted: FriendRequestCreateManyWithoutSourceInput
+  movieLinks: MovieLinkCreateManyWithoutUserInput
+  rooms: RoomCreateManyWithoutMembersInput
+  ownedRooms: RoomCreateManyWithoutOwnerInput
+}
+
+input UserCreateWithoutMovieLinksInput {
+  email: String!
+  password: String!
+  nickname: String!
+  firstName: String
+  lastName: String
+  friendRequestsEmitted: FriendRequestCreateManyWithoutSourceInput
+  friendRequestsReceived: FriendRequestCreateManyWithoutTargetInput
   rooms: RoomCreateManyWithoutMembersInput
   ownedRooms: RoomCreateManyWithoutOwnerInput
 }
@@ -645,8 +886,9 @@ input UserCreateWithoutOwnedRoomsInput {
   nickname: String!
   firstName: String
   lastName: String
-  friends: UserCreateManyWithoutFriendsInput
-  movies: MovieRelationCreateManyWithoutUserInput
+  friendRequestsEmitted: FriendRequestCreateManyWithoutSourceInput
+  friendRequestsReceived: FriendRequestCreateManyWithoutTargetInput
+  movieLinks: MovieLinkCreateManyWithoutUserInput
   rooms: RoomCreateManyWithoutMembersInput
 }
 
@@ -656,8 +898,9 @@ input UserCreateWithoutRoomsInput {
   nickname: String!
   firstName: String
   lastName: String
-  friends: UserCreateManyWithoutFriendsInput
-  movies: MovieRelationCreateManyWithoutUserInput
+  friendRequestsEmitted: FriendRequestCreateManyWithoutSourceInput
+  friendRequestsReceived: FriendRequestCreateManyWithoutTargetInput
+  movieLinks: MovieLinkCreateManyWithoutUserInput
   ownedRooms: RoomCreateManyWithoutOwnerInput
 }
 
@@ -719,19 +962,11 @@ input UserUpdateInput {
   nickname: String
   firstName: String
   lastName: String
-  friends: UserUpdateManyWithoutFriendsInput
-  movies: MovieRelationUpdateManyWithoutUserInput
+  friendRequestsEmitted: FriendRequestUpdateManyWithoutSourceInput
+  friendRequestsReceived: FriendRequestUpdateManyWithoutTargetInput
+  movieLinks: MovieLinkUpdateManyWithoutUserInput
   rooms: RoomUpdateManyWithoutMembersInput
   ownedRooms: RoomUpdateManyWithoutOwnerInput
-}
-
-input UserUpdateManyWithoutFriendsInput {
-  create: [UserCreateWithoutFriendsInput!]
-  delete: [UserWhereUniqueInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutFriendsInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutFriendsInput!]
 }
 
 input UserUpdateManyWithoutRoomsInput {
@@ -743,10 +978,24 @@ input UserUpdateManyWithoutRoomsInput {
   upsert: [UserUpsertWithWhereUniqueWithoutRoomsInput!]
 }
 
-input UserUpdateOneRequiredWithoutMoviesInput {
-  create: UserCreateWithoutMoviesInput
-  update: UserUpdateWithoutMoviesDataInput
-  upsert: UserUpsertWithoutMoviesInput
+input UserUpdateOneRequiredWithoutFriendRequestsEmittedInput {
+  create: UserCreateWithoutFriendRequestsEmittedInput
+  update: UserUpdateWithoutFriendRequestsEmittedDataInput
+  upsert: UserUpsertWithoutFriendRequestsEmittedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutFriendRequestsReceivedInput {
+  create: UserCreateWithoutFriendRequestsReceivedInput
+  update: UserUpdateWithoutFriendRequestsReceivedDataInput
+  upsert: UserUpsertWithoutFriendRequestsReceivedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutMovieLinksInput {
+  create: UserCreateWithoutMovieLinksInput
+  update: UserUpdateWithoutMovieLinksDataInput
+  upsert: UserUpsertWithoutMovieLinksInput
   connect: UserWhereUniqueInput
 }
 
@@ -757,24 +1006,38 @@ input UserUpdateOneRequiredWithoutOwnedRoomsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateWithoutFriendsDataInput {
+input UserUpdateWithoutFriendRequestsEmittedDataInput {
   email: String
   password: String
   nickname: String
   firstName: String
   lastName: String
-  movies: MovieRelationUpdateManyWithoutUserInput
+  friendRequestsReceived: FriendRequestUpdateManyWithoutTargetInput
+  movieLinks: MovieLinkUpdateManyWithoutUserInput
   rooms: RoomUpdateManyWithoutMembersInput
   ownedRooms: RoomUpdateManyWithoutOwnerInput
 }
 
-input UserUpdateWithoutMoviesDataInput {
+input UserUpdateWithoutFriendRequestsReceivedDataInput {
   email: String
   password: String
   nickname: String
   firstName: String
   lastName: String
-  friends: UserUpdateManyWithoutFriendsInput
+  friendRequestsEmitted: FriendRequestUpdateManyWithoutSourceInput
+  movieLinks: MovieLinkUpdateManyWithoutUserInput
+  rooms: RoomUpdateManyWithoutMembersInput
+  ownedRooms: RoomUpdateManyWithoutOwnerInput
+}
+
+input UserUpdateWithoutMovieLinksDataInput {
+  email: String
+  password: String
+  nickname: String
+  firstName: String
+  lastName: String
+  friendRequestsEmitted: FriendRequestUpdateManyWithoutSourceInput
+  friendRequestsReceived: FriendRequestUpdateManyWithoutTargetInput
   rooms: RoomUpdateManyWithoutMembersInput
   ownedRooms: RoomUpdateManyWithoutOwnerInput
 }
@@ -785,8 +1048,9 @@ input UserUpdateWithoutOwnedRoomsDataInput {
   nickname: String
   firstName: String
   lastName: String
-  friends: UserUpdateManyWithoutFriendsInput
-  movies: MovieRelationUpdateManyWithoutUserInput
+  friendRequestsEmitted: FriendRequestUpdateManyWithoutSourceInput
+  friendRequestsReceived: FriendRequestUpdateManyWithoutTargetInput
+  movieLinks: MovieLinkUpdateManyWithoutUserInput
   rooms: RoomUpdateManyWithoutMembersInput
 }
 
@@ -796,14 +1060,10 @@ input UserUpdateWithoutRoomsDataInput {
   nickname: String
   firstName: String
   lastName: String
-  friends: UserUpdateManyWithoutFriendsInput
-  movies: MovieRelationUpdateManyWithoutUserInput
+  friendRequestsEmitted: FriendRequestUpdateManyWithoutSourceInput
+  friendRequestsReceived: FriendRequestUpdateManyWithoutTargetInput
+  movieLinks: MovieLinkUpdateManyWithoutUserInput
   ownedRooms: RoomUpdateManyWithoutOwnerInput
-}
-
-input UserUpdateWithWhereUniqueWithoutFriendsInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutFriendsDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutRoomsInput {
@@ -811,20 +1071,24 @@ input UserUpdateWithWhereUniqueWithoutRoomsInput {
   data: UserUpdateWithoutRoomsDataInput!
 }
 
-input UserUpsertWithoutMoviesInput {
-  update: UserUpdateWithoutMoviesDataInput!
-  create: UserCreateWithoutMoviesInput!
+input UserUpsertWithoutFriendRequestsEmittedInput {
+  update: UserUpdateWithoutFriendRequestsEmittedDataInput!
+  create: UserCreateWithoutFriendRequestsEmittedInput!
+}
+
+input UserUpsertWithoutFriendRequestsReceivedInput {
+  update: UserUpdateWithoutFriendRequestsReceivedDataInput!
+  create: UserCreateWithoutFriendRequestsReceivedInput!
+}
+
+input UserUpsertWithoutMovieLinksInput {
+  update: UserUpdateWithoutMovieLinksDataInput!
+  create: UserCreateWithoutMovieLinksInput!
 }
 
 input UserUpsertWithoutOwnedRoomsInput {
   update: UserUpdateWithoutOwnedRoomsDataInput!
   create: UserCreateWithoutOwnedRoomsInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutFriendsInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutFriendsDataInput!
-  create: UserCreateWithoutFriendsInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutRoomsInput {
@@ -918,9 +1182,21 @@ input UserWhereInput {
   lastName_not_starts_with: String
   lastName_ends_with: String
   lastName_not_ends_with: String
-  friends_every: UserWhereInput
-  friends_some: UserWhereInput
-  friends_none: UserWhereInput
+  friendRequestsEmitted_every: FriendRequestWhereInput
+  friendRequestsEmitted_some: FriendRequestWhereInput
+  friendRequestsEmitted_none: FriendRequestWhereInput
+  friendRequestsReceived_every: FriendRequestWhereInput
+  friendRequestsReceived_some: FriendRequestWhereInput
+  friendRequestsReceived_none: FriendRequestWhereInput
+  movieLinks_every: MovieLinkWhereInput
+  movieLinks_some: MovieLinkWhereInput
+  movieLinks_none: MovieLinkWhereInput
+  rooms_every: RoomWhereInput
+  rooms_some: RoomWhereInput
+  rooms_none: RoomWhereInput
+  ownedRooms_every: RoomWhereInput
+  ownedRooms_some: RoomWhereInput
+  ownedRooms_none: RoomWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -929,15 +1205,6 @@ input UserWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
-  movies_every: MovieRelationWhereInput
-  movies_some: MovieRelationWhereInput
-  movies_none: MovieRelationWhereInput
-  rooms_every: RoomWhereInput
-  rooms_some: RoomWhereInput
-  rooms_none: RoomWhereInput
-  ownedRooms_every: RoomWhereInput
-  ownedRooms_some: RoomWhereInput
-  ownedRooms_none: RoomWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -948,4 +1215,4 @@ input UserWhereUniqueInput {
   email: String
   nickname: String
 }
-`
+`;
