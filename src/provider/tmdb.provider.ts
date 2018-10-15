@@ -1,13 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { CacheStore, CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { Tmdb } from 'tmdb';
 import { Movie } from '../app.interface';
 import { ConfigService } from '../config/config.service';
 import { IMovieMetadataProvider } from './interfaces/movie-metadata.interface';
 
+const trendingKey = page => `movie:trending:tmdb:${page}`;
+
 @Injectable()
 export class TmdbProvider implements IMovieMetadataProvider {
   private tmdb: Tmdb;
-  constructor(private config: ConfigService) {
+  constructor(
+    private config: ConfigService,
+    @Inject(CACHE_MANAGER) private cache: CacheStore,
+  ) {
     this.tmdb = new Tmdb(config.get('TMDB_API_KEY'));
   }
 
@@ -29,7 +34,10 @@ export class TmdbProvider implements IMovieMetadataProvider {
     const movies: Movie[] = [];
     let page = 1;
     while (fetching) {
-      const response = await this.tmdb.get('movie/popular', { page });
+      const cachedResponse = <unknown>await this.cache.get(trendingKey(page));
+      const response =
+        cachedResponse || (await this.tmdb.get('movie/popular', { page }));
+      if (!cachedResponse) this.cache.set(trendingKey(page), response);
       page++;
       for (const { id, title, overview, releaseDate } of response.results) {
         if (excludes.indexOf(`${id}`) == -1) {

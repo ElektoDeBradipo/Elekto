@@ -1,30 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { CacheStore, CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { Movie } from '../app.interface';
 import { MovieNode } from '../prisma/prisma.binding';
 import { PrismaService } from '../prisma/prisma.service';
 import { TmdbProvider } from './tmdb.provider';
+
+const movieKey = id => `movie:${id}`;
 
 @Injectable()
 export class ProviderService {
   constructor(
     private tmdbProvider: TmdbProvider,
     private prisma: PrismaService,
+    @Inject(CACHE_MANAGER) private cache: CacheStore,
   ) {}
 
   async getMovie(movieNodeOrId: MovieNode | string): Promise<Movie> {
-    let movie: Movie;
-    console.log(movieNodeOrId, typeof movieNodeOrId == 'string');
+    const cachedMovie = <unknown>(
+      await this.cache.get<Movie>(
+        movieKey(
+          typeof movieNodeOrId == 'string' ? movieNodeOrId : movieNodeOrId.id,
+        ),
+      )
+    );
+    if (cachedMovie) return <Movie>cachedMovie;
+
     let movieNode: MovieNode =
       typeof movieNodeOrId == 'string'
         ? await this.prisma.r.movie({ id: movieNodeOrId })
         : movieNodeOrId;
-    if (movieNode.tmdbId) {
-      movie = await this.tmdbProvider.getMovie(movieNode.tmdbId);
-    } else {
-      throw new Error('No provider');
-    }
 
-    return { ...movie, id: movieNode.id };
+    if (!movieNode.tmdbId) throw new Error('No provider');
+
+    const movie: Movie = await this.tmdbProvider.getMovie(movieNode.tmdbId);
+    movie.id = movieNode.id;
+
+    this.cache.set<Movie>(movieKey(movieNode.id), movie);
+
+    return movie;
   }
 
   async getTrendingMovies(
@@ -46,7 +58,9 @@ export class ProviderService {
         movieDb = await this.prisma.r.createMovie({ tmdbId: tmdbMovie.id });
       }
 
-      movies.push({ ...tmdbMovie, id: movieDb.id });
+      const movie: Movie = { ...tmdbMovie, id: movieDb.id };
+      this.cache.set(movieKey(movie.id), movie);
+      movies.push(movie);
     }
 
     return movies;
