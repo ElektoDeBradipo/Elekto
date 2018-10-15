@@ -1,5 +1,5 @@
 import { Args, Parent, ResolveProperty } from '@nestjs/graphql';
-import { UserMovie, UserRoom } from '../app.interface';
+import { UserMovie, UserRoom, Friend } from '../app.interface';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProviderService } from '../provider/provider.service';
 
@@ -46,5 +46,17 @@ export class UserPropertyResolver {
       return { owned, ...room };
     });
     return Promise.all(resultPromises);
+  }
+
+  @ResolveProperty()
+  async friends(@Parent() { id }): Promise<Partial<Friend>[]> {
+    return await this.prisma.r.users({
+      where: {
+        OR: [
+          { friendRequestsReceived_some: { target: { id } } },
+          { friendRequestsEmitted_some: { source: { id } } },
+        ],
+      },
+    });
   }
 }
