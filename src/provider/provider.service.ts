@@ -11,8 +11,13 @@ export class ProviderService {
     private prisma: PrismaService,
   ) {}
 
-  async getMovie(movieNode: MovieNode): Promise<Movie> {
+  async getMovie(movieNodeOrId: MovieNode | string): Promise<Movie> {
     let movie: Movie;
+    console.log(movieNodeOrId, typeof movieNodeOrId == 'string');
+    let movieNode: MovieNode =
+      typeof movieNodeOrId == 'string'
+        ? await this.prisma.r.movie({ id: movieNodeOrId })
+        : movieNodeOrId;
     if (movieNode.tmdbId) {
       movie = await this.tmdbProvider.getMovie(movieNode.tmdbId);
     } else {
