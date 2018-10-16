@@ -1,5 +1,5 @@
 import { Args, Parent, ResolveProperty } from '@nestjs/graphql';
-import { UserMovie, UserRoom, Friend } from '../app.interface';
+import { Friend, UserMovie, UserRoom } from '../app.interface';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProviderService } from '../provider/provider.service';
 
