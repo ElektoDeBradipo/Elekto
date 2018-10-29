@@ -1,8 +1,12 @@
-import { Args, Info, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Room } from '../app.interface';
+import { GqlAuthGuard } from '../auth/gql-auth.guard';
 import { ConfigService } from '../config/config.service';
+import { RoomType } from '../prisma/prisma.binding';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProviderService } from '../provider/provider.service';
+import { User } from '../user/user.decorator';
 import { RoomPropertyResolver } from './room-property.resolver';
 import { RoomService } from './room.service';
 
@@ -20,5 +24,20 @@ export class RoomResolver extends RoomPropertyResolver {
   @Query()
   async room(@Args('id') id: string, @Info() info): Promise<Partial<Room>> {
     return await this.prisma.r.room({ id });
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation()
+  async roomCreate(
+    @Args('name') name: string,
+    @Args('type') type: RoomType,
+    @User() user,
+  ): Promise<Partial<Room>> {
+    return await this.prisma.r.createRoom({
+      name,
+      type,
+      owner: { connect: { id: user.id } },
+      members: { connect: { id: user.id } },
+    });
   }
 }
