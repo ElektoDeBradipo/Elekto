@@ -36,7 +36,7 @@ type Mutation {
   userWatchlisted(movieId: ID!, value: Boolean!): Movie
 
   #RoomModule
-  roomCreate(name: String!, type: RoomType!): Room
+  roomCreate(name: String!, type: RoomType!, members: [ID]): Room
   roomAdd(users: [ID]!): [User!]!
   roomRemove(users: [ID]!): [User!]!
   roomUpdate(name: String, type: RoomType): Room

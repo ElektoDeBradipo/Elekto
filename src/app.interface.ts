@@ -173,6 +173,7 @@ export interface UserWatchlistedMutationArgs {
 export interface RoomCreateMutationArgs {
   name: string;
   type: RoomType;
+  members?: (string | null)[] | null;
 }
 export interface RoomAddMutationArgs {
   users: (string | null)[];
@@ -635,6 +636,7 @@ export namespace MutationResolvers {
   export interface RoomCreateArgs {
     name: string;
     type: RoomType;
+    members?: (string | null)[] | null;
   }
 
   export type RoomAddResolver<

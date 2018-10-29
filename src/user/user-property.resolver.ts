@@ -53,8 +53,8 @@ export class UserPropertyResolver {
     return await this.prisma.r.users({
       where: {
         OR: [
-          { friendRequestsReceived_some: { target: { id } } },
-          { friendRequestsEmitted_some: { source: { id } } },
+          { friendRequestsReceived_some: { source: { id } } },
+          { friendRequestsEmitted_some: { target: { id } } },
         ],
       },
     });

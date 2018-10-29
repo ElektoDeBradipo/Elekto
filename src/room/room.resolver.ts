@@ -31,13 +31,16 @@ export class RoomResolver extends RoomPropertyResolver {
   async roomCreate(
     @Args('name') name: string,
     @Args('type') type: RoomType,
+    @Args('members') members: string[],
     @User() user,
   ): Promise<Partial<Room>> {
+    let membersConnect = [];
+    if (members) membersConnect = members.map(id => ({ id }));
     return await this.prisma.r.createRoom({
       name,
       type,
       owner: { connect: { id: user.id } },
-      members: { connect: { id: user.id } },
+      members: { connect: [{ id: user.id }, ...membersConnect] },
     });
   }
 }
