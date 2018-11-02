@@ -4,6 +4,7 @@ type Query {
   #UserModule
   me: User
   user(id: ID!): User
+  users(search: String): [User!]!
 
   #MovieModule
   movie(id: ID!): Movie

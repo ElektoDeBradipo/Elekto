@@ -35,6 +35,7 @@ export type Date = any;
 export interface Query {
   me?: User | null;
   user?: User | null;
+  users: User[];
   movie?: Movie | null;
   room?: Room | null;
 }
@@ -118,6 +119,9 @@ export interface AuthPayload {
 }
 export interface UserQueryArgs {
   id: string;
+}
+export interface UsersQueryArgs {
+  search?: string | null;
 }
 export interface MovieQueryArgs {
   id: string;
@@ -209,6 +213,7 @@ export namespace QueryResolvers {
   export interface Resolvers<Context = any> {
     me?: MeResolver<User | null, any, Context>;
     user?: UserResolver<User | null, any, Context>;
+    users?: UsersResolver<User[], any, Context>;
     movie?: MovieResolver<Movie | null, any, Context>;
     room?: RoomResolver<Room | null, any, Context>;
   }
@@ -225,6 +230,16 @@ export namespace QueryResolvers {
   > = Resolver<R, Parent, Context, UserArgs>;
   export interface UserArgs {
     id: string;
+  }
+
+  export type UsersResolver<R = User[], Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context,
+    UsersArgs
+  >;
+  export interface UsersArgs {
+    search?: string | null;
   }
 
   export type MovieResolver<
