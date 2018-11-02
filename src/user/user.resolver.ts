@@ -26,11 +26,19 @@ export class UserResolver extends UserPropertyResolver {
 
   @Query()
   async users(
+    @User() user,
     @Args('search') search: string,
   ): Promise<Partial<UserInterface>[]> {
     if (!search || search.length < 2) return [];
     return await this.prisma.r.users({
-      where: { nickname_contains: search },
+      where: {
+        nickname_contains: search,
+        id_not: user.id,
+        AND: [
+          { friendRequestsReceived_none: { source: { id: user.id } } },
+          { friendRequestsEmitted_none: { target: { id: user.id } } },
+        ],
+      },
       first: 15,
     });
   }
