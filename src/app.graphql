@@ -8,10 +8,14 @@ type Query {
 
   #MovieModule
   movie(id: ID!): Movie
+  movies(search: String): [Movie!]!
+  movieUser(id: ID!): UserMovie
+  moviesUser(search: String): [UserMovie!]!
 
   #RoomModule
   room(id: ID!): Room
 }
+
 
 type Mutation {
   #AuthModule

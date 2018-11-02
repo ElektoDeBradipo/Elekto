@@ -6,6 +6,13 @@ import { IMovieMetadataProvider } from './interfaces/movie-metadata.interface';
 
 const trendingKey = page => `movie:trending:tmdb:${page}`;
 
+const toMovie = ({ id, title, overview, releaseDate }): Movie => ({
+  id: `${id}`,
+  title,
+  overview,
+  releaseDate: new Date(releaseDate),
+});
+
 @Injectable()
 export class TmdbProvider implements IMovieMetadataProvider {
   private tmdb: Tmdb;
@@ -58,6 +65,12 @@ export class TmdbProvider implements IMovieMetadataProvider {
       }
     }
 
+    return movies;
+  }
+
+  async searchMovie(search: string): Promise<Movie[]> {
+    const response = await this.tmdb.get('search/movie', { query: search });
+    const movies = response.results.map(toMovie);
     return movies;
   }
 }

@@ -52,17 +52,32 @@ export class ProviderService {
 
     const movies: Movie[] = [];
     for (const tmdbMovie of tmdbMovies) {
-      let movieDb = await this.prisma.r.movie({ tmdbId: tmdbMovie.id });
-
-      if (!movieDb) {
-        movieDb = await this.prisma.r.createMovie({ tmdbId: tmdbMovie.id });
-      }
-
-      const movie: Movie = { ...tmdbMovie, id: movieDb.id };
+      const movie: Movie = await this.updateMovie('tmdb', tmdbMovie);
       this.cache.set(movieKey(movie.id), movie);
       movies.push(movie);
     }
 
     return movies;
+  }
+
+  async searchMovie(search: string): Promise<Movie[]> {
+    const tmdbMovies = await this.tmdbProvider.searchMovie(search);
+    const movies = [];
+    for (const tmdbMovie of tmdbMovies) {
+      const movie: Movie = await this.updateMovie('tmdb', tmdbMovie);
+      this.cache.set(movieKey(movie.id), movie);
+      movies.push(movie);
+    }
+    return movies;
+  }
+
+  private async updateMovie(type: 'tmdb', movie: Movie): Promise<Movie> {
+    let movieDb = await this.prisma.r.movie({ tmdbId: movie.id });
+
+    if (!movieDb) {
+      movieDb = await this.prisma.r.createMovie({ tmdbId: movie.id });
+    }
+
+    return { ...movie, id: movieDb.id };
   }
 }

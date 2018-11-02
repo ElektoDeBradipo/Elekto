@@ -37,6 +37,9 @@ export interface Query {
   user?: User | null;
   users: User[];
   movie?: Movie | null;
+  movies: Movie[];
+  movieUser?: UserMovie | null;
+  moviesUser: UserMovie[];
   room?: Room | null;
 }
 
@@ -125,6 +128,15 @@ export interface UsersQueryArgs {
 }
 export interface MovieQueryArgs {
   id: string;
+}
+export interface MoviesQueryArgs {
+  search?: string | null;
+}
+export interface MovieUserQueryArgs {
+  id: string;
+}
+export interface MoviesUserQueryArgs {
+  search?: string | null;
 }
 export interface RoomQueryArgs {
   id: string;
@@ -215,6 +227,9 @@ export namespace QueryResolvers {
     user?: UserResolver<User | null, any, Context>;
     users?: UsersResolver<User[], any, Context>;
     movie?: MovieResolver<Movie | null, any, Context>;
+    movies?: MoviesResolver<Movie[], any, Context>;
+    movieUser?: MovieUserResolver<UserMovie | null, any, Context>;
+    moviesUser?: MoviesUserResolver<UserMovie[], any, Context>;
     room?: RoomResolver<Room | null, any, Context>;
   }
 
@@ -249,6 +264,33 @@ export namespace QueryResolvers {
   > = Resolver<R, Parent, Context, MovieArgs>;
   export interface MovieArgs {
     id: string;
+  }
+
+  export type MoviesResolver<
+    R = Movie[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, MoviesArgs>;
+  export interface MoviesArgs {
+    search?: string | null;
+  }
+
+  export type MovieUserResolver<
+    R = UserMovie | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, MovieUserArgs>;
+  export interface MovieUserArgs {
+    id: string;
+  }
+
+  export type MoviesUserResolver<
+    R = UserMovie[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, MoviesUserArgs>;
+  export interface MoviesUserArgs {
+    search?: string | null;
   }
 
   export type RoomResolver<

@@ -6,4 +6,5 @@ export interface IMovieMetadataProvider {
     number: number,
     excludes: string[],
   ): Movie[] | Promise<Movie[]>;
+  searchMovie(search: string): Movie[] | Promise<Movie[]>;
 }
