@@ -107,8 +107,8 @@ export interface Mutation {
   userUpdate?: User | null;
   friendAdd?: User | null;
   friendRemove?: User | null;
-  userWatched?: Movie | null;
-  userWatchlisted?: Movie | null;
+  userWatched?: UserMovie | null;
+  userWatchlisted?: UserMovie | null;
   roomCreate?: Room | null;
   roomAdd: User[];
   roomRemove: User[];
@@ -603,8 +603,8 @@ export namespace MutationResolvers {
     userUpdate?: UserUpdateResolver<User | null, any, Context>;
     friendAdd?: FriendAddResolver<User | null, any, Context>;
     friendRemove?: FriendRemoveResolver<User | null, any, Context>;
-    userWatched?: UserWatchedResolver<Movie | null, any, Context>;
-    userWatchlisted?: UserWatchlistedResolver<Movie | null, any, Context>;
+    userWatched?: UserWatchedResolver<UserMovie | null, any, Context>;
+    userWatchlisted?: UserWatchlistedResolver<UserMovie | null, any, Context>;
     roomCreate?: RoomCreateResolver<Room | null, any, Context>;
     roomAdd?: RoomAddResolver<User[], any, Context>;
     roomRemove?: RoomRemoveResolver<User[], any, Context>;
@@ -666,7 +666,7 @@ export namespace MutationResolvers {
   }
 
   export type UserWatchedResolver<
-    R = Movie | null,
+    R = UserMovie | null,
     Parent = any,
     Context = any
   > = Resolver<R, Parent, Context, UserWatchedArgs>;
@@ -676,7 +676,7 @@ export namespace MutationResolvers {
   }
 
   export type UserWatchlistedResolver<
-    R = Movie | null,
+    R = UserMovie | null,
     Parent = any,
     Context = any
   > = Resolver<R, Parent, Context, UserWatchlistedArgs>;

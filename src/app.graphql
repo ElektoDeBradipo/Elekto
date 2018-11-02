@@ -37,8 +37,8 @@ type Mutation {
   ): User
   friendAdd(friendId: ID!): User
   friendRemove(friendId: ID!): User
-  userWatched(movieId: ID!, value: Boolean!): Movie
-  userWatchlisted(movieId: ID!, value: Boolean!): Movie
+  userWatched(movieId: ID!, value: Boolean!): UserMovie
+  userWatchlisted(movieId: ID!, value: Boolean!): UserMovie
 
   #RoomModule
   roomCreate(name: String!, type: RoomType!, members: [ID]): Room
