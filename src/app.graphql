@@ -67,7 +67,7 @@ type User {
 type Movie {
   id: ID!
   title: String!
-  releaseDate: Date!
+  releaseDate: Date
   overview: String!
 }
 

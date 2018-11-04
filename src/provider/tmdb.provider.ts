@@ -6,11 +6,11 @@ import { IMovieMetadataProvider } from './interfaces/movie-metadata.interface';
 
 const trendingKey = page => `movie:trending:tmdb:${page}`;
 
-const toMovie = ({ id, title, overview, releaseDate }): Movie => ({
+const toMovie = ({ id, originalTitle, overview, releaseDate }): Movie => ({
   id: `${id}`,
-  title,
+  title: originalTitle,
   overview,
-  releaseDate: new Date(releaseDate),
+  releaseDate: !!releaseDate ? new Date(releaseDate) : undefined,
 });
 
 @Injectable()
@@ -25,12 +25,7 @@ export class TmdbProvider implements IMovieMetadataProvider {
 
   async getMovie(id: string): Promise<Movie> {
     const movie = await this.tmdb.getMovie(id);
-    return {
-      id,
-      title: movie.originalTitle,
-      releaseDate: new Date(movie.releaseDate),
-      overview: movie.overview,
-    };
+    return toMovie(movie);
   }
 
   async getTrendingMovies(
@@ -46,14 +41,9 @@ export class TmdbProvider implements IMovieMetadataProvider {
         cachedResponse || (await this.tmdb.get('movie/popular', { page }));
       if (!cachedResponse) this.cache.set(trendingKey(page), response);
       page++;
-      for (const { id, title, overview, releaseDate } of response.results) {
-        if (excludes.indexOf(`${id}`) == -1) {
-          movies.push({
-            id: `${id}`,
-            title,
-            overview,
-            releaseDate: new Date(releaseDate),
-          });
+      for (const movie of response.results) {
+        if (excludes.indexOf(`${movie.id}`) == -1) {
+          movies.push(toMovie(movie));
           if (movies.length >= number) break;
         }
       }

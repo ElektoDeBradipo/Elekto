@@ -69,7 +69,7 @@ export interface Friend {
 export interface UserMovie {
   id: string;
   title: string;
-  releaseDate: Date;
+  releaseDate?: Date | null;
   overview: string;
   watched: boolean;
   watchlisted: boolean;
@@ -88,7 +88,7 @@ export interface UserRoom {
 export interface Movie {
   id: string;
   title: string;
-  releaseDate: Date;
+  releaseDate?: Date | null;
   overview: string;
 }
 
@@ -431,7 +431,7 @@ export namespace UserMovieResolvers {
   export interface Resolvers<Context = any> {
     id?: IdResolver<string, any, Context>;
     title?: TitleResolver<string, any, Context>;
-    releaseDate?: ReleaseDateResolver<Date, any, Context>;
+    releaseDate?: ReleaseDateResolver<Date | null, any, Context>;
     overview?: OverviewResolver<string, any, Context>;
     watched?: WatchedResolver<boolean, any, Context>;
     watchlisted?: WatchlistedResolver<boolean, any, Context>;
@@ -448,7 +448,7 @@ export namespace UserMovieResolvers {
     Context
   >;
   export type ReleaseDateResolver<
-    R = Date,
+    R = Date | null,
     Parent = any,
     Context = any
   > = Resolver<R, Parent, Context>;
@@ -525,7 +525,7 @@ export namespace MovieResolvers {
   export interface Resolvers<Context = any> {
     id?: IdResolver<string, any, Context>;
     title?: TitleResolver<string, any, Context>;
-    releaseDate?: ReleaseDateResolver<Date, any, Context>;
+    releaseDate?: ReleaseDateResolver<Date | null, any, Context>;
     overview?: OverviewResolver<string, any, Context>;
   }
 
@@ -540,7 +540,7 @@ export namespace MovieResolvers {
     Context
   >;
   export type ReleaseDateResolver<
-    R = Date,
+    R = Date | null,
     Parent = any,
     Context = any
   > = Resolver<R, Parent, Context>;
